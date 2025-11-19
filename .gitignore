@@ -368,3 +368,6 @@ bin/
 # Code Analysis results
 *.sarif
 *.sarif.json
+
+HomeAway/bin
+HomeAway/obj
