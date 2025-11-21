@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <div class="admin-logo">HomeAway Admin</div>
+        <nav class="admin-nav">
+            <a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="#"><i class="fas fa-bed"></i> Rooms</a>
+            <a href="#"><i class="fas fa-book"></i> Bookings</a>
+            <a href="#"><i class="fas fa-users"></i> Customers</a>
+            <a href="#"><i class="fas fa-chart-line"></i> Reports</a>
+            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+        </nav>
+    </aside>
+    <div class="admin-main-content">
+        <div class="admin-header">
+            <h2>Admin Dashboard</h2>
+            <button class="btn-admin-user">Admin User</button>
+        </div>
+
+        <div class="stats-admin-grid">
+            <div class="stat-card light-blue">156 <p>Total Bookings</p></div>
+            <div class="stat-card light-green">$45.2K <p>Revenue</p></div>
+            <div class="stat-card light-yellow">42 <p>Pending</p></div>
+            <div class="stat-card light-red">8 <p>Cancelled</p></div>
+        </div>
+
+        <h3 class="section-title">Recent Bookings</h3>
+        <table class="recent-bookings-table">
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Hotel</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>#B9001</td>
+                    <td>John Doe</td>
+                    <td>Grand Plaza</td>
+                    <td>2024-12-15</td>
+                    <td>2024-12-18</td>
+                    <td>$656.70</td>
+                    <td><span class="status confirmed">Confirmed</span></td>
+                    <td><button class="btn-view">View</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
