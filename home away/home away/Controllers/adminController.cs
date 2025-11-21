@@ -17,7 +17,7 @@ namespace HomeAway.FrontEnd.Controllers
         {
             _hotelService = hotelService;
             _adminService = adminService;
-        }
+        }  ///hi
 
         // دالة لوحة التحكم الرئيسية (Dashboard)
         public async Task<IActionResult> Dashboard()
