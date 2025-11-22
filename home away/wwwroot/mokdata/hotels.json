@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Grand Hotel",
+    "city": "Cairo",
+    "price": 1200.0,
+    "rating": 4.5,
+    "image": "/images/hotel1.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Nile View Inn",
+    "city": "Giza",
+    "price": 900.0,
+    "rating": 4.2,
+    "image": "/images/hotel2.jpg"
+  }
+]
