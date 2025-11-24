@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36401.2 d17.14
+VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "home away", "home away\home away.csproj", "{E1F0A614-5629-4503-B996-5EC98EB58490}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeAway", "home away\HomeAway.csproj", "{E1F0A614-5629-4503-B996-5EC98EB58490}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

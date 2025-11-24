@@ -1,79 +1,82 @@
-﻿using HomeAway.Models;
-using System.Net.Http.Json; // يجب إضافة هذا لتمكين ReadFromJsonAsync و PostAsJsonAsync
+﻿//using home_away.Interfaces;
+//using HomeAway.DTOs;
+//using HomeAway.Models;
 
-namespace HomeAway.Service
-{
-    public class HotelService
-    {
-        private readonly HttpClient httpClient;
+//public class HotelService : IHotelService
+//{
+//    private readonly ApplicationDbContext _context;
 
-        public HotelService(HttpClient httpClient)
-        {
-            this.httpClient = httpClient;
-            // ملاحظة: يُفترض أن BaseAddress تم تكوينه في Program.cs (كما ذكرنا سابقاً)
-        }
+//    public HotelService(ApplicationDbContext context)
+//    {
+//        _context = context;
+//    }
 
-        // 1. القراءة - جلب الكل (Read All)
-        public async Task<List<Hotel>> GetAll()
-        {
-            var response = await httpClient.GetAsync("/api/Hotels");
-            response.EnsureSuccessStatusCode(); // تأكد من أن الحالة هي 2xx
-            return await response.Content.ReadFromJsonAsync<List<Hotel>>();
-        }
+//    // GET ALL
+//    public async Task<IEnumerable<HotelDto>> GetAllAsync()
+//    {
+//        return await _context.Hotels
+//            .Select(h => new HotelDto
+//            {
+//                Id = h.Id,
+//                Name = h.Name,
+//                Address = h.Address
+//            })
+//            .ToListAsync();
+//    }
 
-        // 2. القراءة - جلب بالمعرف (Read By ID)
-        public async Task<Hotel> GetById(int id)
-        {
-            var response = await httpClient.GetAsync($"/api/Hotels/{id}");
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<Hotel>();
-        }
+//    // GET BY ID
+//    public async Task<HotelDto> GetByIdAsync(int id)
+//    {
+//        var h = await _context.Hotels.FindAsync(id);
 
-        // **3. الإنشاء - إضافة فندق جديد (Create - Add)**
-        // تستخدم PostAsJsonAsync لإرسال كائن Hotel في جسم الطلب
-        public async Task Add(Hotel hotel)
-        {
-            var response = await httpClient.PostAsJsonAsync("/api/Hotels", hotel);
-            // استخدم EnsureSuccessStatusCode لرمي استثناء إذا لم يكن الرد ناجحاً
-            response.EnsureSuccessStatusCode();
-            // يمكن أيضاً إرجاع الكائن المُضاف إذا كان الـ API يرجع كائناً
-        }
+//        if (h == null) return null;
 
-        // **4. التحديث - تحديث بيانات فندق (Update)**
-        // تستخدم PutAsJsonAsync لإرسال كائن Hotel المحدث
-        public async Task Update(Hotel hotel)
-        {
-            // يُفترض أن الـ API يقبل الـ ID داخل الـ Body أو كجزء من الرابط (سنستخدم الرابط هنا)
-            var response = await httpClient.PutAsJsonAsync($"/api/Hotels/{hotel.Id}", hotel);
-            response.EnsureSuccessStatusCode();
-        }
-        public async Task<List<Booking>> GetBookingsByHotelId(int hotelId)
-        {
-            // يُفترض أن الـ API الخاص بك يحتوي على مسار (Endpoint) 
-            // مثل /api/Hotels/{hotelId}/bookings
-            var response = await httpClient.GetAsync($"/api/Hotels/{hotelId}/Bookings");
+//        return new HotelDto
+//        {
+//            Id = h.Id,
+//            Name = h.Name,
+//            Address = h.Address
+//        };
+//    }
 
-            // تحقق من أن الاستجابة كانت ناجحة
-            response.EnsureSuccessStatusCode();
+//    // CREATE
+//    public async Task<int> CreateAsync(HotelDto dto)
+//    {
+//        var hotel = new Hotel
+//        {
+//            Name = dto.Name,
+//            Address = dto.Address
+//        };
 
-            // قراءة محتوى الاستجابة وتحويله إلى قائمة من كائنات Booking
-            return await response.Content.ReadFromJsonAsync<List<Booking>>();
-        }
+//        _context.Hotels.Add(hotel);
+//        await _context.SaveChangesAsync();
+//        return hotel.Id;
+//    }
 
-        // **5. الحذف - حذف فندق (Delete)**
-        public async Task Delete(int id)
-        {
-            var response = await httpClient.DeleteAsync($"/api/Hotels/{id}");
-            response.EnsureSuccessStatusCode();
-        }
+//    // UPDATE
+//    public async Task<bool> UpdateAsync(HotelDto dto)
+//    {
+//        var hotel = await _context.Hotels.FindAsync(dto.Id);
+//        if (hotel == null)
+//            return false;
 
-        // 6. البحث بالاسم (وظيفة إضافية كما في الصورة)
-        // يُفترض أن الـ API يحتوي على Endpoint للبحث بالاسم مثل /api/Hotels/byname?name=...
-        public async Task<Hotel> GetByName(string name)
-        {
-            var response = await httpClient.GetAsync($"/api/Hotels/byname?name={name}");
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<Hotel>();
-        }
-    }
-}
+//        hotel.Name = dto.Name;
+//        hotel.Address = dto.Address;
+
+//        _context.Hotels.Update(hotel);
+//        await _context.SaveChangesAsync();
+//        return true;
+//    }
+
+//    // DELETE
+//    public async Task<bool> DeleteAsync(int id)
+//    {
+//        var hotel = await _context.Hotels.FindAsync(id);
+//        if (hotel == null)
+//            return false;
+
+//        _context.Hotels.Remove(hotel);
+//        await _context.SaveChangesAsync();
+//        return true;
+//    }
+//}
