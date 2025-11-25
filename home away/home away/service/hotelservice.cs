@@ -8,6 +8,7 @@ public class HotelService : IHotelService
     public HotelService(IHttpClientFactory httpClientFactory)
     {
         _client = httpClientFactory.CreateClient("HomeAwayAPI");
+
     }
 
     public async Task<List<HotelDto>> GetAllAsync()

@@ -1,4 +1,5 @@
-﻿using HomeAway.Service;
+﻿using home_away.Interfaces;
+using HomeAway.Service;
 
 namespace home_away
 {
@@ -16,16 +17,50 @@ namespace home_away
             //{
             //    client.BaseAddress = new Uri("https://localhost:7184");
             //});
-            builder.Services.AddHttpClient("HomeAwayAPI", client =>
-            {
-                client.BaseAddress = new Uri("https://localhost:7184/api/");
-            });
+            //builder.Services.AddHttpClient("HomeAwayAPI", client =>
+            //{
+            //    client.BaseAddress = new Uri("https://localhost:7184/api/");
+            //});
+
+
+            builder.Services.AddScoped<IHotelService, HotelService>();
+
+
+
 
             // BookingService  ✔ تمت إضافته
             //builder.Services.AddHttpClient<BookingService>(client =>
             //{
             //    client.BaseAddress = new Uri("https://localhost:7184");
             //});
+
+
+
+
+
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSession(); // if you want session option
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            // Register BearerTokenHandler and typed HttpClient that uses it
+            builder.Services.AddTransient<BearerTokenHandler>();
+
+            builder.Services.AddHttpClient("HomeAwayAPI", client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["HomeAwayAPI:BaseUrl"]); // e.g. https://localhost:7184/api/
+            })
+            .AddHttpMessageHandler<BearerTokenHandler>();
+
+            // You can also register a typed client for convenience:
+            builder.Services.AddHttpClient<IAuthService, AuthService>("HomeAwayAPIClient")
+                .AddHttpMessageHandler<BearerTokenHandler>();
+
+            var app = builder.Build();
+            app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+
 
             var app = builder.Build();
 

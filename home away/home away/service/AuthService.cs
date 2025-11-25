@@ -1,47 +1,93 @@
-﻿
-//namespace HomeAway.Services
-//{
-//    public class AuthService : IAuthService
-//    {
-//        private readonly UserManager<ApplicationUser> _userManager;
-//        private readonly JwtTokenService _jwtService;
+﻿using home_away.Interfaces;
+using HomeAway.Auth;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http.Json;
+using System.Text.Json;
 
-//        public AuthService(UserManager<ApplicationUser> userManager, JwtTokenService jwtService)
-//        {
-//            _userManager = userManager;
-//            _jwtService = jwtService;
-//        }
+public class AuthService : IAuthService
+{
+    private readonly HttpClient _client;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IConfiguration _config;
+    private const string CookieName = "BookifyJwt";
 
-//        public async Task<string> RegisterAsync(RegisterDto dto)
-//        {
-//            var user = new ApplicationUser
-//            {
-//                UserName = dto.UserName,
-//                Email = dto.Email,
-//                FullName = dto.FullName
-//            };
+    public AuthService(HttpClient client, IHttpContextAccessor httpContextAccessor, IConfiguration config)
+    {
+        _client = client;
+        _httpContextAccessor = httpContextAccessor;
+        _config = config;
+    }
 
-//            var result = await _userManager.CreateAsync(user, dto.Password);
+    public async Task<bool> RegisterAsync(RegisterDto dto)
+    {
+        var resp = await _client.PostAsJsonAsync("auth/register", dto);
+        return resp.IsSuccessStatusCode;
+    }
 
-//            if (!result.Succeeded)
-//            {
-//                var errors = string.Join(" | ", result.Errors.Select(x => x.Description));
-//                return $"ERROR: {errors}";
-//            }
+    // returns JWT when successful (also stores it)
+    public async Task<string?> LoginAsync(LoginDto dto)
+    {
+        var resp = await _client.PostAsJsonAsync("auth/login", dto);
+        if (!resp.IsSuccessStatusCode) return null;
 
-//            return "SUCCESS";
-//        }
+        // assume API returns { token: "..." }
+        var obj = await resp.Content.ReadFromJsonAsync<JsonElement>();
+        if (obj.TryGetProperty("token", out var tokenProp))
+        {
+            var token = tokenProp.GetString();
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                StoreToken(token);
+                return token;
+            }
+        }
 
-//        public async Task<string> LoginAsync(LoginDto dto)
-//        {
-//            var user = await _userManager.FindByNameAsync(dto.UserName);
+        return null;
+    }
 
-//            if (user == null || !await _userManager.CheckPasswordAsync(user, dto.Password))
-//                return "INVALID";
+    public Task LogoutAsync()
+    {
+        var ctx = _httpContextAccessor.HttpContext;
+        if (ctx != null)
+        {
+            // remove cookie
+            ctx.Response.Cookies.Delete(CookieName);
 
-//            var token = _jwtService.GenerateToken(user);
+            // or remove session
+            // ctx.Session.Remove("BookifyJwt");
+        }
 
-//            return token;
-//        }
-//    }
-//}
+        return Task.CompletedTask;
+    }
+
+    public Task<bool> IsSignedInAsync()
+    {
+        var ctx = _httpContextAccessor.HttpContext;
+        if (ctx == null) return Task.FromResult(false);
+
+        // cookie approach
+        var has = ctx.Request.Cookies.ContainsKey(CookieName);
+        // or session: var has = !string.IsNullOrEmpty(ctx.Session.GetString("BookifyJwt"));
+        return Task.FromResult(has);
+    }
+
+    private void StoreToken(string token)
+    {
+        var ctx = _httpContextAccessor.HttpContext;
+        if (ctx == null) return;
+
+        // OPTION A — store in HttpOnly Secure cookie (recommended)
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,       // true in production (HTTPS)
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTimeOffset.UtcNow.AddHours(12)
+        };
+        ctx.Response.Cookies.Append(CookieName, token, cookieOptions);
+
+        // OPTION B — store in session (alternative)
+        // ctx.Session.SetString("BookifyJwt", token);
+    }
+}
