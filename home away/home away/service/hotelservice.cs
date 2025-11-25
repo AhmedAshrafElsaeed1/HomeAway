@@ -1,82 +1,34 @@
-﻿//using home_away.Interfaces;
-//using HomeAway.DTOs;
-//using HomeAway.Models;
+﻿using home_away.Interfaces;
+using HomeAway.DTOs;
 
-//public class HotelService : IHotelService
-//{
-//    private readonly ApplicationDbContext _context;
+public class HotelService : IHotelService
+{
+    private readonly HttpClient _client;
 
-//    public HotelService(ApplicationDbContext context)
-//    {
-//        _context = context;
-//    }
+    public HotelService(IHttpClientFactory httpClientFactory)
+    {
+        _client = httpClientFactory.CreateClient("HomeAwayAPI");
+    }
 
-//    // GET ALL
-//    public async Task<IEnumerable<HotelDto>> GetAllAsync()
-//    {
-//        return await _context.Hotels
-//            .Select(h => new HotelDto
-//            {
-//                Id = h.Id,
-//                Name = h.Name,
-//                Address = h.Address
-//            })
-//            .ToListAsync();
-//    }
+    public async Task<List<HotelDto>> GetAllAsync()
+    {
+        var response = await _client.GetAsync("hotels");
+        response.EnsureSuccessStatusCode();
 
-//    // GET BY ID
-//    public async Task<HotelDto> GetByIdAsync(int id)
-//    {
-//        var h = await _context.Hotels.FindAsync(id);
+        return await response.Content.ReadFromJsonAsync<List<HotelDto>>();
+    }
 
-//        if (h == null) return null;
+    public async Task<HotelDto> GetByIdAsync(int id)
+    {
+        var response = await _client.GetAsync($"hotels/{id}");
+        response.EnsureSuccessStatusCode();
 
-//        return new HotelDto
-//        {
-//            Id = h.Id,
-//            Name = h.Name,
-//            Address = h.Address
-//        };
-//    }
+        return await response.Content.ReadFromJsonAsync<HotelDto>();
+    }
 
-//    // CREATE
-//    public async Task<int> CreateAsync(HotelDto dto)
-//    {
-//        var hotel = new Hotel
-//        {
-//            Name = dto.Name,
-//            Address = dto.Address
-//        };
-
-//        _context.Hotels.Add(hotel);
-//        await _context.SaveChangesAsync();
-//        return hotel.Id;
-//    }
-
-//    // UPDATE
-//    public async Task<bool> UpdateAsync(HotelDto dto)
-//    {
-//        var hotel = await _context.Hotels.FindAsync(dto.Id);
-//        if (hotel == null)
-//            return false;
-
-//        hotel.Name = dto.Name;
-//        hotel.Address = dto.Address;
-
-//        _context.Hotels.Update(hotel);
-//        await _context.SaveChangesAsync();
-//        return true;
-//    }
-
-//    // DELETE
-//    public async Task<bool> DeleteAsync(int id)
-//    {
-//        var hotel = await _context.Hotels.FindAsync(id);
-//        if (hotel == null)
-//            return false;
-
-//        _context.Hotels.Remove(hotel);
-//        await _context.SaveChangesAsync();
-//        return true;
-//    }
-//}
+    public async Task CreateAsync(HotelDto dto)
+    {
+        var response = await _client.PostAsJsonAsync("hotels", dto);
+        response.EnsureSuccessStatusCode();
+    }
+}
