@@ -16,31 +16,31 @@ namespace HomeAway.FrontEnd.Controllers
         }
 
         // دالة نتائج البحث
-        public async Task<IActionResult> Results(
-            string location,
-            DateTime checkIn,
-            DateTime checkOut,
-            int guests)
-        {
-            // **ملاحظة:** هنا يجب أن يكون لديك دالة في HotelService 
-            // لاستقبال معايير البحث المعقدة (الموقع، التواريخ، الضيوف). 
-            // سنستخدم GetByName مؤقتاً لمحاكاة البحث بالموقع.
+        //public async Task<IActionResult> Results(
+        //    string location,
+        //    DateTime checkIn,
+        //    DateTime checkOut,
+        //    int guests)
+        //{
+        //    // **ملاحظة:** هنا يجب أن يكون لديك دالة في HotelService 
+        //    // لاستقبال معايير البحث المعقدة (الموقع، التواريخ، الضيوف). 
+        //    // سنستخدم GetByName مؤقتاً لمحاكاة البحث بالموقع.
 
-            List<Hotel> searchResults;
+        //    List<Hotel> searchResults;
 
-            // إذا كان الـ API الخاص بك يدعم البحث المتقدم
-            // searchResults = await _hotelService.Search(location, checkIn, checkOut, guests);
+        //    // إذا كان الـ API الخاص بك يدعم البحث المتقدم
+        //    // searchResults = await _hotelService.Search(location, checkIn, checkOut, guests);
 
-            // كحل مؤقت، سنقوم بجلب الكل ثم التصفية (يجب تفضيل التصفية من الـ API)
-            var allHotels = await _hotelService.GetAll();
-            searchResults = allHotels.Where(h => h.City == location).ToList(); // تصفية وهمية
+        //    // كحل مؤقت، سنقوم بجلب الكل ثم التصفية (يجب تفضيل التصفية من الـ API)
+        //    var allHotels = await _hotelService.GetAll();
+        //    searchResults = allHotels.Where(h => h.City == location).ToList(); // تصفية وهمية
 
-            // يمكن وضع معايير البحث في ViewBag أو موديل خاص
-            ViewBag.SearchLocation = location;
-            ViewBag.Count = searchResults.Count;
+        //    // يمكن وضع معايير البحث في ViewBag أو موديل خاص
+        //    ViewBag.SearchLocation = location;
+        //    ViewBag.Count = searchResults.Count;
 
-            return View(searchResults);
-        }
+        //    return View(searchResults);
+        //}
     }
 }
 

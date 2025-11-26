@@ -16,39 +16,39 @@ namespace HomeAway.FrontEnd.Controllers
             _bookingService = bookingService;
         }
 
-        // دالة عرض تفاصيل الفندق والغرف المتاحة
-        public async Task<IActionResult> Details(int id)
-        {
-            Hotel hotelDetails = await _hotelService.GetById(id);
+        //// دالة عرض تفاصيل الفندق والغرف المتاحة
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //    Hotel hotelDetails = await _hotelService.GetById(id);
 
-            if (hotelDetails == null)
-            {
-                return NotFound();
-            }
+        //    if (hotelDetails == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            // يُفترض أن موديل Hotel يحتوي على قائمة الغرف (Rooms) أو نستخدم خدمة أخرى لجلبها
-            return View(hotelDetails);
-        }
+        //    // يُفترض أن موديل Hotel يحتوي على قائمة الغرف (Rooms) أو نستخدم خدمة أخرى لجلبها
+        //    return View(hotelDetails);
+        //}
 
-        // دالة معالجة طلب الحجز (زر "Book Now")
-        [HttpPost]
-        public async Task<IActionResult> Book(BookingModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // **ملاحظة:** هنا يجب أن تقوم بتحويل بيانات الموديل إلى موديل الحجز (Booking) 
-                // ومن ثم استخدام _bookingService.Add(bookingObject)
+        //// دالة معالجة طلب الحجز (زر "Book Now")
+        //[HttpPost]
+        //public async Task<IActionResult> Book(BookingModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        // **ملاحظة:** هنا يجب أن تقوم بتحويل بيانات الموديل إلى موديل الحجز (Booking) 
+        //        // ومن ثم استخدام _bookingService.Add(bookingObject)
 
-                // هنا يتم إرسال طلب إلى الـ API لإنشاء الحجز
-                // await _bookingService.Add(model); 
+        //        // هنا يتم إرسال طلب إلى الـ API لإنشاء الحجز
+        //        // await _bookingService.Add(model); 
 
-                // إعادة توجيه المستخدم إلى صفحة التأكيد أو صفحة الحجوزات الخاصة به
-                return RedirectToAction("MyBookings", "Profile");
-            }
+        //        // إعادة توجيه المستخدم إلى صفحة التأكيد أو صفحة الحجوزات الخاصة به
+        //        return RedirectToAction("MyBookings", "Profile");
+        //    }
 
-            // العودة إلى صفحة التفاصيل إذا كان هناك خطأ في الإدخال
-            return View("Details", await _hotelService.GetById(model.HotelId));
-        }
+        //    // العودة إلى صفحة التفاصيل إذا كان هناك خطأ في الإدخال
+        //    return View("Details", await _hotelService.GetById(model.HotelId));
+        //}
     }
 
     // موديل افتراضي لاستقبال بيانات الحجز من الفورم

@@ -22,22 +22,6 @@ namespace home_away
             //    client.BaseAddress = new Uri("https://localhost:7184/api/");
             //});
 
-
-            builder.Services.AddScoped<IHotelService, HotelService>();
-
-
-
-
-            // BookingService  ✔ تمت إضافته
-            //builder.Services.AddHttpClient<BookingService>(client =>
-            //{
-            //    client.BaseAddress = new Uri("https://localhost:7184");
-            //});
-
-
-
-
-
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddSession(); // if you want session option
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -55,6 +39,24 @@ namespace home_away
             builder.Services.AddHttpClient<IAuthService, AuthService>("HomeAwayAPIClient")
                 .AddHttpMessageHandler<BearerTokenHandler>();
 
+
+            builder.Services.AddHttpClient<IHotelService, HotelService>("HomeAwayAPI")
+    .AddHttpMessageHandler<BearerTokenHandler>();
+
+
+            builder.Services.AddScoped<IHotelService, HotelService>();
+
+
+
+
+            // BookingService  ✔ تمت إضافته
+            //builder.Services.AddHttpClient<BookingService>(client =>
+            //{
+            //    client.BaseAddress = new Uri("https://localhost:7184");
+            //});
+
+
+
             var app = builder.Build();
             app.UseSession();
             app.UseAuthentication();
@@ -62,7 +64,6 @@ namespace home_away
 
 
 
-            var app = builder.Build();
 
             if (!app.Environment.IsDevelopment())
             {
