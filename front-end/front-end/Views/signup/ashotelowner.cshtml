@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "signup";
+    Layout = "_Layout";
+}
+    <div class="signup-container">
+
+        <div class="signup-box">
+            <h2 class="title">Sign Up</h2>
+
+              <!-- Stepper -->
+        <div class="stepper">
+            <span class="step active"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+        </div>
+
+        <div class="step-labels">
+            <p class="active">Personal info</p>
+            <p>Hotel info</p>
+            <p>Room info</p>
+        </div>
+
+           
+
+            <!-- Form Fields -->
+            <form>
+                <label>Full Name</label>
+                <input type="text" placeholder="enter your name">
+
+                <label>Email Address</label>
+                <input type="email" placeholder="enter your email">
+
+                <label>Password</label>
+                <input type="password" placeholder="enter your password">
+
+                <label>Confirm password</label>
+                <input type="password" placeholder="confirm password">
+
+                <!-- NEXT BUTTON (go to next page) -->
+               <a asp-controller="signup" asp-action="registerhotel" class="next-btn btn btn-primary">
+    Next
+</a>
+
+            </form>
+
+        </div>
+
+    

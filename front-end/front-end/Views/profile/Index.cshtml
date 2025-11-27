@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Profile";
+    Layout = "_Layout";
+}
+
+<div class="profile-layout">
+    <aside class="profile-sidebar">
+        <div class="user-info">
+            <div class="user-avatar">JD</div>
+            <h3>John Doe</h3>
+            <p>john.doe@email.com</p>
+        </div>
+        <nav class="profile-nav">
+            <a href="#" class="active">My Bookings</a>
+            <a href="#">Profile</a>
+            <a href="#">Wishlist</a>
+            <a href="#">Settings</a>
+            <a href="#" class="logout">Logout</a>
+        </nav>
+    </aside>
+    <div class="profile-content">
+        <h2>My Bookings</h2>
+        <button class="btn btn-new-booking">New Booking</button>
+
+        <div class="booking-item">
+            <img src="~/images/pic6.jpg" alt="Grand Plaza Hotel">
+            <div class="booking-details">
+                <h4>Grand Plaza Hotel</h4>
+                <p>Dec 15 - Dec 18, 2024 (3 nights)</p>
+                <p>2 Adults, 1 Room</p>
+            </div>
+            <div class="booking-status">
+                <span>$656.70</span>
+                <span class="status confirmed">Confirmed</span>
+                <button class="btn btn-details">View Details</button>
+            </div>
+        </div>
+        <div class="booking-item">
+            <img src="~/images/pic5.jpg" alt="Seaside Resort">
+            <div class="booking-details">
+                <h4>Seaside Resort</h4>
+                <p>Nov 10 - Nov 12, 2024 (2 nights)</p>
+                <p>2 Adults, 1 Room</p>
+            </div>
+            <div class="booking-status">
+                <span>$420.50</span>
+                <span class="status completed">Completed</span>
+                <button class="btn btn-details">View Details</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="number">12</span>
+                <p>Total Bookings</p>
+            </div>
+            <div class="stat-card">
+                <span class="number">8</span>
+                <p>Completed Stays</p>
+            </div>
+            <div class="stat-card">
+                <span class="number">2</span>
+                <p>Upcoming Trips</p>
+            </div>
+        </div>
+    </div>
+</div>
+

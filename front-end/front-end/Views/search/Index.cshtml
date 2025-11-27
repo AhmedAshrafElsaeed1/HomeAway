@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Search";
+    Layout = "_Layout";
+}
+
+<div class="search-layout">
+    <aside class="sidebar-filter">
+        <h3>Filters</h3>
+        <div class="filter-group">
+            <h4>Price Range</h4>
+            <input type="range" min="0" max="1000" value="500">
+            <div class="range-display">$0 - $1000</div>
+        </div>
+        <div class="filter-group">
+            <h4>Star Rating</h4>
+            <div class="rating-checkbox">⭐⭐⭐⭐⭐</div>
+            <div class="rating-checkbox">⭐⭐⭐⭐ & up</div>
+        </div>
+        <div class="filter-group">
+            <h4>Amenities</h4>
+            <div><input type="checkbox"> Free WiFi</div>
+            <div><input type="checkbox"> Swimming Pool</div>
+            <div><input type="checkbox"> Free Parking</div>
+        </div>
+        <button class="btn btn-apply">Apply Filters</button>
+    </aside>
+
+    <div class="results-list">
+        <h2>125 hotels found in New York</h2>
+
+        <div class="hotel-result-card">
+            <img src="~/images/pic1.jpg" alt="Grand Plaza Hotel">
+            <div class="info">
+                <h3>Grand Plaza Hotel</h3>
+                <p>Manhattan, New York</p>
+                <div class="rating">4.5 (128 reviews)</div>
+                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
+            </div>
+            <div class="price-action">
+                <div class="price">$199 <span>per night</span></div>
+                <button class="btn btn-select" data-page="reserve">Select Room</button>
+            </div>
+        </div>
+        <div class="hotel-result-card">
+            <img src="~/images/pic6.jpg" alt="Grand Plaza Hotel">
+            <div class="info">
+                <h3>Grand Plaza Hotel</h3>
+                <p>Manhattan, New York</p>
+                <div class="rating">4.5 (128 reviews)</div>
+                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
+            </div>
+            <div class="price-action">
+                <div class="price">$199 <span>per night</span></div>
+                <button class="btn btn-select" data-page="reserve">Select Room</button>
+            </div>
+        </div>
+        <div class="hotel-result-card">
+            <img src="~/images/pic4.jpg" alt="Grand Plaza Hotel">
+            <div class="info">
+                <h3>Grand Plaza Hotel</h3>
+                <p>Manhattan, New York</p>
+                <div class="rating">4.5 (128 reviews)</div>
+                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
+            </div>
+            <div class="price-action">
+                <div class="price">$199 <span>per night</span></div>
+                <button class="btn btn-select" data-page="reserve">Select Room</button>
+            </div>
+        </div>
+        <div class="hotel-result-card">
+            <img src="~/images/pic3.jpg" alt="Grand Plaza Hotel">
+            <div class="info">
+                <h3>Grand Plaza Hotel</h3>
+                <p>Manhattan, New York</p>
+                <div class="rating">4.5 (128 reviews)</div>
+                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
+            </div>
+            <div class="price-action">
+                <div class="price">$199 <span>per night</span></div>
+                <button class="btn btn-select" data-page="reserve">Select Room</button>
+            </div>
+        </div>
+        <div class="hotel-result-card">
+            <img src="~/images/pic2.jpg" alt="Grand Plaza Hotel">
+            <div class="info">
+                <h3>Grand Plaza Hotel</h3>
+                <p>Manhattan, New York</p>
+                <div class="rating">4.5 (128 reviews)</div>
+                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
+            </div>
+            <div class="price-action">
+                <div class="price">$199 <span>per night</span></div>
+                <button class="btn btn-select" data-page="reserve">Select Room</button>
+            </div>
+        </div>
+    </div>
+</div>
+

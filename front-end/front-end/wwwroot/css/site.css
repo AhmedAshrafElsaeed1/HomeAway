@@ -1,0 +1,1440 @@
+﻿/* root variables are good to keep for consistency across custom components */
+/* Custom Variables - keep these or integrate with Bootstrap's theme if preferred */
+:root {
+    --primary-color: #007bff; /* Bright Blue */
+    --secondary-color: #f8f9fa; /* Light Gray Background */
+    --text-color: #333;
+    --border-color: #ddd;
+    --confirmed-color: #28a745;
+    --completed-color: #6c757d;
+    --font-family: Arial, sans-serif; /* Bootstrap has its own default, keep if you want this specific font */
+}
+
+/* Reset or base styles, Bootstrap's Reboot handles most of these */
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: white; /* Pages content is mainly white */
+    padding-top: 70px;
+}
+
+/* --- Navbar (Image 1 - Updated) --- */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 50px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+    .navbar .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+.navbar-links {
+    list-style: none; /* إزالة النقاط */
+    display: flex; /* العناصر جنب بعض */
+    gap: 20px; /* مسافة بين الروابط */
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+    .navbar-links li {
+        display: flex;
+        align-items: center;
+    }
+
+        .navbar-links li a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+
+            .navbar-links li a:hover {
+                color: var(--primary-color);
+                border-bottom: 2px solid var(--primary-color);
+            }
+
+/* زر Login */
+.btn-login {
+    background-color: var(--primary-color);
+    border: none;
+    color: white;
+    border-radius: 15px;
+    padding: 8px 20px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+    .btn-login:hover {
+        background-color: #0056b3;
+    }
+
+
+/* Custom Dropdown for Auth */
+.dropdown-menu.auth-dropdown {
+    min-width: 150px; /* Adjust width as needed */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+    .dropdown-menu.auth-dropdown .dropdown-item {
+        padding: 8px 15px;
+        color: var(--text-color);
+    }
+
+        .dropdown-menu.auth-dropdown .dropdown-item:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+/* --- Page Management --- */
+.page {
+    display: none; /* Hidden by default */
+    max-width: 1400px; /* Max width for content */
+    margin: 0 auto; /* Center the page */
+    padding: 20px 0; /* Vertical padding */
+}
+
+    .page.active {
+        display: block; /* Show active page */
+        margin-top: 70px; /* Push content down from sticky navbar */
+    }
+
+.content-area {
+    margin: 80px; /* Custom margin around main content */
+    padding-top: 70px; /* Adjust for sticky navbar */
+}
+
+.section-title {
+    margin: 20px 0 15px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #444;
+    padding-left: 10px; /* Indent the title slightly */
+}
+
+/* --- Shared Elements (Inputs, Buttons) --- */
+/* Bootstrap's .form-control handles most input styling, customize if needed */
+/* .form-control classes should be used directly in HTML */
+
+.btn-primary, .btn-reserve, .btn-select, .btn-new-booking {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 25px;
+    border-radius: .25rem; /* Bootstrap's default */
+    border-color: var(--primary-color);
+}
+
+    .btn-primary:hover, .btn-reserve:hover, .btn-select:hover, .btn-new-booking:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+.btn-details {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: .375rem .75rem; /* Bootstrap's default */
+    border-radius: .25rem;
+}
+
+    .btn-details:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+/* --- 1. Home Page (Image 1 - Updated) --- */
+.hero-section {
+    position: relative;
+    height: 500px;
+    background: url('/images/home.jpg') no-repeat center center/cover; /* Replace with your image */
+    border-radius: 8px;
+    margin: 20px 100px; /* Custom margin */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-box-container {
+    width: 80%;
+    max-width: 900px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+    .search-box-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+.search-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+    .search-inputs .input-destination, .search-inputs .input-date, .search-inputs select {
+        flex-grow: 1;
+    }
+
+.btn-search {
+    background-color: var(--primary-color);
+    border-radius: 25px;
+    color: white;
+    padding: 10px 30px;
+    border: none;
+}
+
+/* Featured Hotel Card */
+.featured-hotel-card {
+    margin: 20px 80px 20px 80px;
+    display: flex;
+    gap: 20px;
+    padding: 0px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 50%; /* Only one card shown in the image */
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+    .featured-hotel-card img {
+        width: 200px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .featured-hotel-card .details {
+        flex-grow: 1;
+        padding: 15px;
+    }
+
+    .featured-hotel-card .price-tag {
+        background-color: orange;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-weight: bold;
+        float: right;
+    }
+
+    .featured-hotel-card .rating {
+        color: gold;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+/* --- 2. Search Results Page (Not directly in current images, but keeping structure) --- */
+.search-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 30px;
+    padding-top: 20px;
+    align-items: start;
+}
+
+.sidebar-filter {
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--secondary-color);
+}
+
+    .sidebar-filter h3 {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+
+.filter-group {
+    margin-bottom: 20px;
+}
+
+    .filter-group h4 {
+        margin-bottom: 10px;
+        font-size: 16px;
+        font-weight: normal;
+    }
+
+.range-display {
+    font-size: 14px;
+    color: #666;
+}
+
+.btn-apply {
+    background-color: var(--primary-color);
+    color: white;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.results-list h2 {
+    font-size: 20px;
+    display: inline-block;
+}
+
+.sort-dropdown {
+    float: right;
+    border: 1px solid var(--border-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.hotel-result-card {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-top: 15px;
+    padding: 15px;
+    gap: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+    .hotel-result-card img {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .hotel-result-card .info {
+        flex-grow: 1;
+    }
+
+    .hotel-result-card h3 {
+        margin-bottom: 5px;
+        font-size: 18px;
+    }
+
+    .hotel-result-card .amenities-list span {
+        background-color: #eee;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+        margin-right: 5px;
+    }
+
+.price-action {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+    .price-action .price {
+        font-size: 22px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+
+        .price-action .price span {
+            display: block;
+            font-size: 12px;
+            font-weight: normal;
+            color: #666;
+        }
+
+/* --- 3. Hotel Details / Reserve Page (Not directly in current images, but keeping structure) --- */
+.hotel-gallery {
+    display: flex;
+    gap: 15px;
+    margin: 30px auto;
+    justify-content: center;
+    max-width: 1200px;
+}
+
+    .hotel-gallery .main-image {
+        width: 900px;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .hotel-gallery .side-images {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 300px;
+    }
+
+        .hotel-gallery .side-images img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+.hotel-content-booking {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    margin-bottom: 50px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hotel-details-content {
+    flex-grow: 1;
+    padding-right: 20px;
+}
+
+    .hotel-details-content h1 {
+        font-size: 32px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .hotel-details-content .location {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    .hotel-details-content .rating-reviews {
+        color: #ffc107;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+.amenities-list-details {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 10px 0 25px 0;
+    padding: 0;
+    font-size: 15px;
+    color: #555;
+}
+
+    .amenities-list-details li i {
+        color: var(--primary-color);
+        margin-right: 8px;
+    }
+
+.hotel-details-content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.room-card {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    gap: 20px;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+    .room-card img {
+        width: 180px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+.room-info {
+    flex-grow: 1;
+    max-width: 60%;
+}
+
+    .room-info h4 {
+        margin-bottom: 5px;
+        font-size: 19px;
+        color: #333;
+    }
+
+    .room-info p {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+    .room-info .cancellation-details {
+        font-size: 13px;
+        color: var(--confirmed-color);
+        font-weight: bold;
+    }
+
+.room-price-action {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+    .room-price-action .price-per-night {
+        font-size: 22px;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 8px;
+    }
+
+        .room-price-action .price-per-night span {
+            font-size: 13px;
+            font-weight: normal;
+            color: #777;
+            display: block;
+        }
+
+    .room-price-action .btn-book {
+        padding: 10px 25px;
+        font-size: 16px;
+        border-radius: 4px;
+    }
+
+.booking-widget {
+    background-color: var(--secondary-color);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+    width: 350px;
+}
+
+    .booking-widget h3 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 20px;
+        color: #333;
+        font-weight: 600;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .booking-widget .form-group {
+        margin-bottom: 15px;
+    }
+
+        .booking-widget .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #444;
+        }
+
+.price-summary {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    margin-top: 25px;
+    font-size: 15px;
+}
+
+    .price-summary p {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        color: #555;
+    }
+
+    .price-summary .fees {
+        font-size: 14px;
+        color: #777;
+    }
+
+    .price-summary .total {
+        font-size: 22px;
+        font-weight: bold;
+        color: var(--primary-color);
+        border-top: 1px dashed #bbb;
+        padding-top: 10px;
+        margin-top: 10px;
+    }
+
+.btn-reserve {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px 25px;
+    font-size: 17px;
+    border-radius: 6px;
+}
+
+/* --- 4. Profile / My Bookings Page (Not directly in current images, but keeping structure) --- */
+.profile-layout {
+    display: flex;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 20px auto;
+    align-items: flex-start;
+}
+
+.profile-sidebar {
+    width: 250px;
+    padding: 20px;
+    background-color: white;
+    border-right: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    flex-shrink: 0;
+}
+
+.user-info {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 60px;
+    margin: 0 auto 10px;
+}
+
+.user-info h3 {
+    margin-bottom: 5px;
+}
+
+.user-info p {
+    font-size: 14px;
+    color: #666;
+}
+
+.profile-nav a {
+    display: block;
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    transition: background-color 0.2s;
+}
+
+    .profile-nav a.active {
+        background-color: var(--primary-color);
+        color: white !important;
+    }
+
+    .profile-nav a:hover:not(.active) {
+        background-color: var(--secondary-color);
+    }
+
+.profile-nav .logout {
+    color: red;
+    margin-top: 20px;
+}
+
+.profile-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+    .profile-content h2 {
+        display: inline-block;
+    }
+
+.btn-new-booking {
+    float: right;
+}
+
+.booking-item {
+    display: flex;
+    gap: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+    .booking-item img {
+        width: 100px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+.booking-details {
+    flex-grow: 1;
+}
+
+.booking-status {
+    text-align: right;
+}
+
+    .booking-status span {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+.status {
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.confirmed {
+    background-color: #d4edda;
+    color: var(--confirmed-color);
+}
+
+.completed {
+    background-color: #e2e6ea;
+    color: var(--completed-color);
+}
+
+.stats-grid {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.stat-card {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-align: center;
+    background-color: var(--secondary-color);
+}
+
+    .stat-card .number {
+        font-size: 30px;
+        font-weight: bold;
+        color: var(--primary-color);
+        display: block;
+        margin-bottom: 5px;
+    }
+
+/* --- 5. Admin Dashboard Page (Image 2 - Updated) --- */
+#admin {
+    max-width: none !important; /* Override any general page max-width */
+    width: 100%; /* Ensure full width */
+    padding: 0; /* Remove default page padding */
+    margin: 0; /* Remove default page margin */
+}
+
+.admin-layout {
+    display: flex; /* Bootstrap's d-flex for sidebar layout */
+    min-height: 100vh; /* Full viewport height */
+}
+
+.admin-sidebar {
+    width: 250px; /* Fixed width for sidebar */
+    background-color: #343a40; /* Dark background */
+    color: white;
+    padding: 20px 0; /* Vertical padding */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.admin-logo {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 0 20px;
+    color: white; /* Ensure logo is white */
+}
+
+/* Admin Sidebar Navigation */
+.admin-nav {
+    list-style: none; /* Remove bullet points */
+    padding: 0;
+    margin: 0;
+}
+
+    .admin-nav a {
+        display: block;
+        color: #adb5bd; /* Lighter gray for links */
+        text-decoration: none;
+        padding: 12px 20px;
+        transition: background-color 0.2s, color 0.2s, border-left 0.2s;
+    }
+
+        .admin-nav a:hover, .admin-nav a.active {
+            background-color: #495057; /* Darker on hover/active */
+            color: white;
+            border-left: 3px solid var(--primary-color); /* Highlight for active/hover */
+        }
+
+    .admin-nav i {
+        margin-right: 10px; /* Space for icons */
+    }
+
+.admin-main-content {
+    flex-grow: 1; /* Take remaining width */
+    padding: 30px;
+    background-color: #f8f9fa; /* Light background for main content */
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .admin-header h2 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+    }
+
+.btn-admin-user {
+    background-color: white;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    padding: 5px 15px;
+    border-radius: 4px;
+}
+
+/* Admin Dashboard Stats Cards */
+.stats-admin-grid {
+    display: grid; /* Grid layout for stats */
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+    gap: 20px; /* Space between cards */
+    margin-bottom: 30px;
+}
+
+    .stats-admin-grid .stat-card {
+        padding: 20px;
+        border-radius: 4px;
+        font-size: 24px;
+        font-weight: bold;
+        background-color: #fff; /* White background */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Light shadow */
+    }
+
+        .stats-admin-grid .stat-card p {
+            font-size: 14px;
+            font-weight: normal;
+            color: #666;
+            margin-top: 5px;
+        }
+
+/* Color indicators for stats */
+.light-blue {
+    background-color: #e9f5ff;
+    border-left: 5px solid #007bff;
+}
+
+.light-green {
+    background-color: #e8f9ed;
+    border-left: 5px solid #28a745;
+}
+
+.light-yellow {
+    background-color: #fff8e8;
+    border-left: 5px solid #ffc107;
+}
+
+.light-red {
+    background-color: #ffeaea;
+    border-left: 5px solid #dc3545;
+}
+
+/* Recent Bookings Table */
+.recent-bookings-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 8px; /* Rounded corners for the table container */
+    overflow: hidden; /* Ensures rounded corners apply to content */
+}
+
+    .recent-bookings-table th, .recent-bookings-table td {
+        border: 1px solid #dee2e6; /* Bootstrap's table border */
+        padding: 12px;
+        text-align: left;
+    }
+
+    .recent-bookings-table th {
+        background-color: #f1f3f5; /* Light gray header */
+        font-weight: 600;
+        color: #495057;
+    }
+
+.btn-view {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 5px 10px;
+    font-weight: normal;
+    border-radius: 4px;
+}
+
+    .btn-view:hover {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+/* Status Badges in Table */
+.recent-bookings-table .status {
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    color: white; /* Default text color for badge */
+}
+
+    .recent-bookings-table .status.confirmed {
+        background-color: var(--confirmed-color); /* Green */
+    }
+/* You can add .pending, .cancelled status styles here */
+
+
+/* --- 6. & 7. Login/Sign Up Pages (Not in current images, but keeping structure) --- */
+
+.login-box {
+    width: 420px;
+    position: relative;
+    justify-content: center;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-title {
+    font-weight: 700;
+    font-size: 22px;
+    color: #0d6efd;
+}
+
+.subtitle {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.form-control {
+    height: 45px;
+    border-radius: 8px;
+}
+
+.btn-main {
+    height: 45px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+a {
+    text-decoration: none;
+}
+.page-center {
+    display: flex;
+    justify-content: center; /* أفقي */
+    align-items: center; /* عمودي */
+    min-height: 100vh; /* الصفحة كلها */
+    padding: 20px; /* احتياطي لكل الشاشات */
+    background: #f5f5f5; /* اختياري */
+}
+.signup-box {
+    width: 420px;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    animation: fadeIn 0.7s ease-in-out;
+    text-align: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.role-btn {
+    border: 2px solid #0d6efd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 18px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+    .role-btn:hover {
+        background-color: #0d6efd;
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.35);
+    }
+
+.icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.btn-next {
+    height: 45px;
+    width: 100%;
+    border-radius: 8px;
+    font-weight: 600;
+}
+.signup-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* علشان ياخد ارتفاع الشاشة بالكامل */
+    padding: 20px;
+    background: #f5f5f5; /* اختياري */
+}
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 40px;
+}
+
+.signup-box {
+    width: 380px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.title {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+/* Stepper */
+.stepper-container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* تصميم الـStepper المصغر */
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 15px;
+    padding: 0 15px;
+}
+
+    .stepper::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 40px;
+        right: 40px;
+        height: 2px;
+        background: #e2e8f0;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+.stepper-progress {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    height: 2px;
+    background: linear-gradient(to right, #1e88e5, #0d47a1);
+    transform: translateY(-50%);
+    z-index: 2;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.step {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 12px;
+    color: #a0aec0;
+    position: relative;
+    z-index: 3;
+    transition: all 0.3s ease;
+}
+
+    .step.active {
+        border-color: #1e88e5;
+        background: #1e88e5;
+        color: white;
+        box-shadow: 0 2px 6px rgba(30, 136, 229, 0.3);
+    }
+
+    .step.completed {
+        border-color: #1e88e5;
+        background: #1e88e5;
+        color: white;
+    }
+
+        .step.completed::after {
+            content: '✓';
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+.step-labels {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    margin-top: 12px;
+    padding: 0 10px;
+}
+
+    .step-labels p {
+        font-size: 12px;
+        color: #a0aec0;
+        font-weight: 500;
+        text-align: center;
+        width: 33%;
+        transition: all 0.3s ease;
+    }
+
+        .step-labels p.active {
+            color: #1e88e5;
+            font-weight: 600;
+        }
+
+/* أزرار التحكم */
+.stepper-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.control-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.prev-btn {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.next-btn {
+    background: #1e88e5;
+    color: white;
+}
+
+.control-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Inputs */
+form {
+    text-align: left;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 6px 0 14px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Button */
+.next-btn {
+    width: 100%;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+    .next-btn:hover {
+        background: #0067d6;
+    }
+          /* container wrapper */
+/* container wrapper */
+.register-wrapper .card {
+    padding: 30px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 6px 18px rgba(17,24,39,0.06);
+}
+
+/* عناوين الأقسام داخل اليسار - Unchanged */
+.register-wrapper h4 {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #111827;
+}
+
+/* الليفلت الجانبية والـ inputs - Unchanged */
+.register-wrapper label {
+    display: block;
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 10px;
+    margin-bottom: 6px;
+}
+
+.register-wrapper .form-control,
+.register-wrapper textarea,
+.register-wrapper input[type="text"],
+.register-wrapper input[type="email"],
+.register-wrapper input[type="password"] {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    font-size: 14px;
+    color: #111827;
+    box-shadow: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+    resize: vertical;
+}
+
+.register-wrapper textarea {
+    min-height: 80px;
+}
+
+    /* focus state - Unchanged */
+    .register-wrapper .form-control:focus,
+    .register-wrapper textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+    }
+
+/* اليمين: بلوك رفع الصور - محسن - MODIFIED */
+.register-wrapper .photos-box {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 30px 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 6px 16px rgba(13,110,253,0.15);
+    /* height: 420px; */ /* Removed fixed height */
+    min-height: 400px; /* NEW: Increased min-height for default */
+    height: auto; /* Allow height to adjust based on content */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    .register-wrapper .photos-box::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        z-index: 1;
+    }
+
+    .register-wrapper .photos-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(13,110,253,0.2);
+    }
+
+    .register-wrapper .photos-box h5 {
+        margin: 0 0 12px 0;
+        font-size: 20px;
+        font-weight: 600;
+        position: relative;
+        z-index: 2;
+    }
+
+    .register-wrapper .photos-box p {
+        margin: 0 0 20px 0;
+        font-size: 14px;
+        opacity: 0.9;
+        position: relative;
+        z-index: 2;
+    }
+
+/* أيقونة رفع الملفات - Unchanged */
+.upload-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    z-index: 2;
+}
+
+/* ستايل ملف الرفع ليتناسب مع التصميم - Unchanged */
+.register-wrapper input[type="file"] {
+    background: rgba(255, 255, 255, 0.9);
+    color: #111827;
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: none;
+    width: 100%;
+    max-width: 250px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+    .register-wrapper input[type="file"]:hover {
+        background: white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+/* زر Next مركزي ودائري قليلاً - Unchanged */
+.register-wrapper .next-btn,
+.register-wrapper .btn-primary {
+    display: inline-block;
+    padding: 10px 36px;
+    border-radius: 22px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(13,110,253,0.18);
+    transition: transform .12s ease, box-shadow .12s ease;
+    margin-top: 20px;
+}
+
+    .register-wrapper .next-btn:hover,
+    .register-wrapper .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(13,110,253,0.2);
+    }
+
+/* responsive: لما الشاشة صغيرة نخلي ال layout عمودي - MODIFIED */
+@media (max-width: 991px) {
+    .register-wrapper .card .row {
+        flex-direction: column;
+    }
+
+    .register-wrapper .photos-box {
+        margin-top: 18px;
+        min-height: 280px; /* Adjusted for smaller screens */
+        height: auto;
+    }
+}
+
+/* لمسات إضافية صغيرة - Unchanged */
+.register-wrapper .card .col-md-6 {
+    padding-top: 6px;
+}
+
+/* تأكد على المسافات بين الحقول - Unchanged */
+.register-wrapper form label + .form-control,
+.register-wrapper form label + textarea,
+.register-wrapper form input + label {
+    margin-top: 4px;
+}
+
+/* أزرار التحكم - Unchanged */
+.stepper-controls {
+    display: flex;
+    max-width: 300px;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    margin-left: auto; /* NEW: Center controls too */
+    margin-right: auto; /* NEW: Center controls too */
+}
+
+.control-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.prev-btn {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.next-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.control-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}

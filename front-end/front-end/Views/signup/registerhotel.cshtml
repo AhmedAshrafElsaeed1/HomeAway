@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "signup";
+    Layout = "_Layout";
+}
+
+<div class="register-wrapper">
+    <div class="container" style="margin-top: 40px;">
+
+        <div class="card shadow" style="padding: 30px; border-radius: 15px;">
+            <form enctype="multipart/form-data">
+
+                <h2 class="text-center" style="margin-bottom: 20px; font-weight: 600;">
+                    Register your hotel
+                </h2>
+
+                <div class="row">
+
+                    <!-- Left Side -->
+                    <div class="col-md-6">
+
+                        <h4 style="font-weight:600; margin-bottom:15px;">Hotel Details</h4>
+
+                        <label>Hotel Name</label>
+                        <input class="form-control" type="text" name="HotelName" />
+
+                        <label style="margin-top:10px;">Description</label>
+                        <textarea class="form-control" name="Description"></textarea>
+
+                        <h4 style="font-weight:600; margin-top:20px; margin-bottom:15px;">Location and Contact</h4>
+
+                        <label>Hotel Address</label>
+                        <input class="form-control" type="text" name="HotelAddress" />
+
+                        <label style="margin-top:10px;">Email address</label>
+                        <input class="form-control" type="email" name="Email" />
+
+                        <label style="margin-top:10px;">Phone number</label>
+                        <input class="form-control" type="text" name="Phone" />
+                    </div>
+
+                    <!-- Right Side -->
+                    <div class="col-md-6">
+                        <div style="
+                            background:#007bff;
+                            padding:20px;
+                            border-radius:10px;
+                            color:white;">
+                            
+                            <h5 style="font-weight:600;">Photos of the hotel</h5>
+                            <p>upload up to 10 photos</p>
+
+                            <input type="file" name="Photos" multiple class="form-control" 
+                                   style="background:white; color:black;" />
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- NEXT BUTTON -->
+                <div class="text-center mt-4">
+                    <a asp-controller="signup"
+                       asp-action="rooms"
+                       class="small-next-btn btn btn-primary glow-btn">
+                        Next
+                    </a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<style>
+
+    /* زرار صغير في النص */
+    .small-next-btn {
+        width: 150px;           /* صغير */
+        padding: 6px 0;
+        font-size: 15px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    /* تأثير توهج ناعم */
+    .glow-btn {
+        transition: 0.3s ease;
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+    }
+
+    .glow-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(0, 123, 255, 0.9);
+    }
+
+</style>
