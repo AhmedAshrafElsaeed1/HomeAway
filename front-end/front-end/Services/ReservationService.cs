@@ -5,55 +5,44 @@ namespace front_end.Services
 {
     public class ReservationService : IReservationService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfiguration _config;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public ReservationService(HttpClient httpClient, IConfiguration config)
+        public ReservationService(IHttpClientFactory clientFactory)
         {
-            _httpClient = httpClient;
-            _config = config;
+            _clientFactory = clientFactory;
         }
 
         public async Task<List<ReservationDto>> GetAllAsync()
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/reservations";
-
-            var reservations = await _httpClient.GetFromJsonAsync<List<ReservationDto>>(url);
-
-            return reservations ?? new List<ReservationDto>();
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            return await client.GetFromJsonAsync<List<ReservationDto>>("reservations")
+                   ?? new List<ReservationDto>();
         }
 
         public async Task<ReservationDto?> GetByIdAsync(int id)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/reservations/{id}";
-
-            return await _httpClient.GetFromJsonAsync<ReservationDto>(url);
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            return await client.GetFromJsonAsync<ReservationDto>($"reservations/{id}");
         }
 
         public async Task<bool> CreateAsync(ReservationDto dto)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/reservations";
-
-            var response = await _httpClient.PostAsJsonAsync(url, dto);
-
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.PostAsJsonAsync("reservations", dto);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> UpdateAsync(int id, ReservationDto dto)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/reservations/{id}";
-
-            var response = await _httpClient.PutAsJsonAsync(url, dto);
-
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.PutAsJsonAsync($"reservations/{id}", dto);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/reservations/{id}";
-
-            var response = await _httpClient.DeleteAsync(url);
-
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.DeleteAsync($"reservations/{id}");
             return response.IsSuccessStatusCode;
         }
     }
