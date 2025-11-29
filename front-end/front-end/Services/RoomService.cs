@@ -5,62 +5,56 @@ namespace front_end.Services
 {
     public class RoomService : IRoomService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfiguration _config;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public RoomService(HttpClient httpClient, IConfiguration config)
+        public RoomService(IHttpClientFactory clientFactory)
         {
-            _httpClient = httpClient;
-            _config = config;
+            _clientFactory = clientFactory;
         }
 
         public async Task<List<RoomDto>> GetAllAsync()
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/rooms";
-
-            var result = await _httpClient.GetFromJsonAsync<List<RoomDto>>(url);
-
-            return result ?? new List<RoomDto>();
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            return await client.GetFromJsonAsync<List<RoomDto>>("rooms")
+                   ?? new List<RoomDto>();
         }
 
         public async Task<RoomDto?> GetByIdAsync(int id)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/rooms/{id}";
-
-            return await _httpClient.GetFromJsonAsync<RoomDto>(url);
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            return await client.GetFromJsonAsync<RoomDto>($"rooms/{id}");
         }
 
         public async Task<int?> CreateAsync(RoomDto dto)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/rooms";
-
-            var response = await _httpClient.PostAsJsonAsync(url, dto);
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.PostAsJsonAsync("rooms", dto);
 
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var locationHeader = response.Headers.Location?.ToString();
-            if (locationHeader == null)
-                return null;
+            // API returns CreatedAtAction (no body) — so parse location header
+            if (response.Headers.Location != null)
+            {
+                var segments = response.Headers.Location.Segments;
+                if (int.TryParse(segments.Last(), out int newId))
+                    return newId;
+            }
 
-            return int.Parse(locationHeader.Split('/').Last());
+            return null;
         }
 
         public async Task<bool> UpdateAsync(RoomDto dto)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/rooms";
-
-            var response = await _httpClient.PutAsJsonAsync(url, dto);
-
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.PutAsJsonAsync("rooms", dto);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/rooms/{id}";
-
-            var response = await _httpClient.DeleteAsync(url);
-
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.DeleteAsync($"rooms/{id}");
             return response.IsSuccessStatusCode;
         }
     }
