@@ -1,4 +1,4 @@
-﻿using HomeAway.Auth;
+﻿using front_end.Auth;
 
 namespace front_end.Interfaces
 {

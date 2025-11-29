@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeAway.Auth
+namespace front_end.Auth
 {
     public class RegisterDto
     {

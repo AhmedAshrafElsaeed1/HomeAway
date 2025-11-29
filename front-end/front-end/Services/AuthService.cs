@@ -1,7 +1,7 @@
 ﻿namespace front_end.Services
 {
     using front_end.Interfaces;
-    using HomeAway.Auth;
+    using front_end.Auth;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using System.Net.Http.Json;

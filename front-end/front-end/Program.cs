@@ -32,9 +32,11 @@ namespace front_end
 
 
             // Register API services (Hotel, Room, Reservation)
-            builder.Services.AddHttpClient<IHotelService, HotelService>();
-            builder.Services.AddHttpClient<IRoomService, RoomService>();
-            builder.Services.AddHttpClient<IReservationService, ReservationService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IHotelService, HotelService>();
+            builder.Services.AddScoped<IRoomService, RoomService>();
+            builder.Services.AddScoped<IReservationService, ReservationService>();
+
 
 
             var app = builder.Build();
