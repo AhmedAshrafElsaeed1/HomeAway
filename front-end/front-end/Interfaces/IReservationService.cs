@@ -4,7 +4,7 @@ namespace front_end.Interfaces
 {
     public interface IReservationService
     {
-        Task<IEnumerable<ReservationDto>> GetAllAsync();
+        Task<List<ReservationDto>> GetAllAsync();
         Task<ReservationDto?> GetByIdAsync(int id);
         Task<bool> CreateAsync(ReservationDto dto);
         Task<bool> UpdateAsync(int id, ReservationDto dto);

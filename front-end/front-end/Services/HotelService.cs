@@ -1,69 +1,55 @@
 ﻿using front_end.Interfaces;
 using HomeAway.DTOs;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace front_end.Services
 {
     public class HotelService : IHotelService
     {
-        private readonly HttpClient _httpClient;
-        private readonly IConfiguration _config;
+        private readonly IHttpClientFactory _clientFactory;
 
-        public HotelService(HttpClient httpClient, IConfiguration config)
+        public HotelService(IHttpClientFactory clientFactory)
         {
-            _httpClient = httpClient;
-            _config = config;
+            _clientFactory = clientFactory;
         }
 
-        public async Task<IEnumerable<HotelDto>> GetAllAsync()
+        public async Task<List<HotelDto>> GetAllAsync()
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/hotels";
-
-            var result = await _httpClient.GetFromJsonAsync<IEnumerable<HotelDto>>(url);
-
-            return result ?? Enumerable.Empty<HotelDto>();
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            return await client.GetFromJsonAsync<List<HotelDto>>("hotels")
+                   ?? new List<HotelDto>();
         }
 
         public async Task<HotelDto?> GetByIdAsync(int id)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/hotels/{id}";
-
-            return await _httpClient.GetFromJsonAsync<HotelDto>(url);
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            return await client.GetFromJsonAsync<HotelDto>($"hotels/{id}");
         }
 
         public async Task<int?> CreateAsync(HotelDto dto)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/hotels";
-
-            var response = await _httpClient.PostAsJsonAsync(url, dto);
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.PostAsJsonAsync("hotels", dto);
 
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var locationHeader = response.Headers.Location?.ToString();
-            if (locationHeader == null)
-                return null;
-
-            // Extract ID from URL: /api/hotels/5
-            var idSegment = locationHeader.Split('/').Last();
-            return int.Parse(idSegment);
+            var createdObj = await response.Content.ReadFromJsonAsync<dynamic>();
+            return (int?)createdObj?.id;
         }
 
         public async Task<bool> UpdateAsync(HotelDto dto)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/hotels";
-
-            var response = await _httpClient.PutAsJsonAsync(url, dto);
-
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.PutAsJsonAsync("hotels", dto);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var url = $"{_config["ApiBaseUrl"]}/api/hotels/{id}";
-
-            var response = await _httpClient.DeleteAsync(url);
-
+            var client = _clientFactory.CreateClient("HomeAwayAPI");
+            var response = await client.DeleteAsync($"hotels/{id}");
             return response.IsSuccessStatusCode;
         }
     }

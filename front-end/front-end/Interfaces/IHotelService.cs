@@ -4,7 +4,7 @@ namespace front_end.Interfaces
 {
     public interface IHotelService
     {
-        Task<IEnumerable<HotelDto>> GetAllAsync();
+        Task<List<HotelDto>> GetAllAsync();
         Task<HotelDto?> GetByIdAsync(int id);
         Task<int?> CreateAsync(HotelDto dto);
         Task<bool> UpdateAsync(HotelDto dto);

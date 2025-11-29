@@ -1,5 +1,4 @@
-﻿using HomeAway.Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +13,7 @@ namespace HomeAway.Application.DTOs
         public string? UserId { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
-        public ReservationStatus Status { get; set; }
+        public int Status { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }
