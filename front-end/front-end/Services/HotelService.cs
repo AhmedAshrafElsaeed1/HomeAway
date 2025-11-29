@@ -1,5 +1,5 @@
-﻿using front_end.Interfaces;
-using HomeAway.DTOs;
+﻿using front_end.DTOs;
+using front_end.Interfaces;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
 

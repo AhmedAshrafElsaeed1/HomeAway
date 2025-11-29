@@ -1,4 +1,4 @@
-﻿using HomeAway.Application.DTOs;
+﻿using front_end.DTOs;
 
 namespace front_end.Interfaces
 {

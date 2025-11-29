@@ -1,5 +1,5 @@
 ﻿using front_end.Interfaces;
-using HomeAway.Application.DTOs;
+using front_end.DTOs;
 
 namespace front_end.Services
 {
@@ -14,13 +14,13 @@ namespace front_end.Services
             _config = config;
         }
 
-        public async Task<IEnumerable<RoomDto>> GetAllAsync()
+        public async Task<List<RoomDto>> GetAllAsync()
         {
             var url = $"{_config["ApiBaseUrl"]}/api/rooms";
 
-            var result = await _httpClient.GetFromJsonAsync<IEnumerable<RoomDto>>(url);
+            var result = await _httpClient.GetFromJsonAsync<List<RoomDto>>(url);
 
-            return result ?? Enumerable.Empty<RoomDto>();
+            return result ?? new List<RoomDto>();
         }
 
         public async Task<RoomDto?> GetByIdAsync(int id)

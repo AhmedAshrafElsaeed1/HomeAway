@@ -1,4 +1,4 @@
-﻿using HomeAway.DTOs;
+﻿using front_end.DTOs;
 
 namespace front_end.Interfaces
 {
@@ -9,5 +9,7 @@ namespace front_end.Interfaces
         Task<int?> CreateAsync(HotelDto dto);
         Task<bool> UpdateAsync(HotelDto dto);
         Task<bool> DeleteAsync(int id);
+
+
     }
 }

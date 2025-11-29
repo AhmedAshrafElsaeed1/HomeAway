@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeAway.DTOs
+namespace front_end.DTOs
 {
     public class HotelDto
     {

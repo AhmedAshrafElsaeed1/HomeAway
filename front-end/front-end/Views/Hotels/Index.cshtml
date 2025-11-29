@@ -1,0 +1,12 @@
+﻿@model List<front_end.DTOs.HotelDto>    // dont use !!!!!    for now
+
+<h2>Hotels</h2>
+
+<ul>
+    @foreach (var hotel in Model)
+    {
+        <li>
+            <a href="/Hotels/Details/@hotel.Id">@hotel.Name</a>
+        </li>
+    }
+</ul>
