@@ -12,7 +12,7 @@
         private readonly HttpClient _client;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _config;
-        private const string CookieName = "BookifyJwt";
+        private const string CookieName = "HomeAwayJwt";
 
         public AuthService(HttpClient client, IHttpContextAccessor httpContextAccessor, IConfiguration config)
         {
