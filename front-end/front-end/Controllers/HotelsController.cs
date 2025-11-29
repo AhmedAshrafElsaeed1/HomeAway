@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace front_end.Controllers
 {
-    public class HotelsController : Controller               // dont use !!!!!!!!!!             w8 for more info
+    public class HotelsController : Controller               //  dont use for now !!!!!!!!!!
     {
         private readonly IHotelService _hotelService;
 

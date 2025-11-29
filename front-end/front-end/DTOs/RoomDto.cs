@@ -11,7 +11,7 @@ namespace front_end.DTOs
         public int Id { get; set; }
         //public string HotelName { get; set; }
         public int Quantity { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public bool IsAvailable { get; set; }
         public int? HotelId { get; set; }
 
