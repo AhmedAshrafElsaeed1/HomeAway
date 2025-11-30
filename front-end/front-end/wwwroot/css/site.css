@@ -239,7 +239,6 @@ body {
         margin-bottom: 10px;
     }
 
-/* --- 2. Search Results Page (Not directly in current images, but keeping structure) --- */
 .search-layout {
     display: grid;
     grid-template-columns: 250px 1fr;
@@ -261,20 +260,26 @@ body {
         padding-bottom: 10px;
     }
 
-.filter-group {
-    margin-bottom: 20px;
+.amenity {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-start;
+    gap: 6px; 
+    margin-bottom: 10px;
 }
 
-    .filter-group h4 {
-        margin-bottom: 10px;
-        font-size: 16px;
-        font-weight: normal;
+    .amenity input[type="checkbox"] {
+        margin: 0; 
+        width: 18px;
+        height: 18px;
     }
 
-.range-display {
-    font-size: 14px;
-    color: #666;
-}
+    .amenity label {
+        font-size: 15px;
+        color: #333;
+        cursor: pointer; 
+    }
+
 
 .btn-apply {
     background-color: var(--primary-color);
@@ -576,8 +581,44 @@ body {
     font-size: 17px;
     border-radius: 6px;
 }
+/* الكلاسات المخصصة لبطاقة الدفع والحدود */
+.payment-page-wrapper {
+    
+    background-color: #f4f7f9; 
 
-/* --- 4. Profile / My Bookings Page (Not directly in current images, but keeping structure) --- */
+.payment-card-custom {
+   
+    border: 1px solid #a07a68 !important; /* الحد البني */
+    border-radius: 12px !important;
+    max-width: 600px;
+    width: 90%;
+    padding: 40px !important; /* زيادة البادينغ الداخلي */
+}
+
+
+.custom-btn-width {
+    min-width: 150px; 
+    font-weight: 600;
+}
+
+
+.btn-secondary {
+    background-color: #17a2b8 !important; 
+    border-color: #17a2b8 !important;
+    color: white !important;
+}
+
+    .btn-secondary:hover {
+        background-color: #138496 !important;
+        border-color: #138496 !important;
+    }
+
+
+.col-form-label {
+    font-weight: 500;
+    color: #000;
+}
+
 .profile-layout {
     display: flex;
     gap: 30px;
@@ -737,7 +778,7 @@ body {
 /* --- 5. Admin Dashboard Page (Image 2 - Updated) --- */
 #admin {
     max-width: none !important; /* Override any general page max-width */
-    width: 100%; /* Ensure full width */
+    width: 100%; 
     padding: 0; /* Remove default page padding */
     margin: 0; /* Remove default page margin */
 }
@@ -1438,3 +1479,4 @@ input {
     transform: translateY(-1px);
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
+
