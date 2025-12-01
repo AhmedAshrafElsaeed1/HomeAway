@@ -1,33 +1,35 @@
-﻿@{
-    ViewData["Title"] = "signup";
-    Layout = "_Layout";
-}
-<div class="signup-container">
-    <div class="signup-box">
+﻿<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
 
-        <h2 class="title">Sign Up</h2>
+            <div class="card p-4 shadow">
+                <h3 class="text-center mb-4">Sign Up</h3>
 
-        <!-- Stepper -->
-        
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" placeholder="enter your name">
+                    </div>
 
-        
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" placeholder="enter your email">
+                    </div>
 
-        <!-- Form -->
-        <form>
-            <label>Full Name</label>
-            <input type="text" placeholder="enter your name">
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" placeholder="enter your password">
+                    </div>
 
-            <label>Email Address</label>
-            <input type="email" placeholder="enter your email">
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" placeholder="confirm password">
+                    </div>
 
-            <label>Password</label>
-            <input type="password" placeholder="enter your password">
+                    <button class="btn btn-primary w-100">Confirm</button>
+                </form>
+            </div>
 
-            <label>Confirm password</label>
-            <input type="password" placeholder="confirm password">
-
-            <button class="next-btn">Confirm</button>
-        </form>
-
+        </div>
     </div>
 </div>

@@ -583,17 +583,18 @@ body {
 }
 /* الكلاسات المخصصة لبطاقة الدفع والحدود */
 .payment-page-wrapper {
-    
-    background-color: #f4f7f9; 
+    background-color: #f4f7f9;
+}
 
-.payment-card-custom {
-   
-    border: 1px solid #a07a68 !important; /* الحد البني */
-    border-radius: 12px !important;
+.payment-card-custom
+{
+    border: 1px solid #a07a68; /* الحد البني */
+    border-radius: 12px;
     max-width: 600px;
     width: 90%;
-    padding: 40px !important; /* زيادة البادينغ الداخلي */
-}
+    padding: 40px;
+} /* زيادة البادينغ الداخلي */
+
 
 
 .custom-btn-width {

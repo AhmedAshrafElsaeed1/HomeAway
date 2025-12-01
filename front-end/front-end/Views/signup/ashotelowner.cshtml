@@ -2,47 +2,58 @@
     ViewData["Title"] = "signup";
     Layout = "_Layout";
 }
-    <div class="signup-container">
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="card shadow p-4" style="max-width: 500px; width: 100%; border-radius: 15px;">
 
-        <div class="signup-box">
-            <h2 class="title">Sign Up</h2>
+        <!-- Title -->
+        <h2 class="text-center mb-3 text-primary fw-bold">Sign Up</h2>
 
-              <!-- Stepper -->
-        <div class="stepper">
-            <span class="step active"></span>
-            <span class="step"></span>
-            <span class="step"></span>
+        <div class="d-flex justify-content-center align-items-center mb-3">
+            <div class="rounded-circle bg-primary" style="width: 16px; height: 16px;"></div>
+            <div class="flex-grow-1 bg-secondary mx-2" style="height: 4px;"></div>
+            <div class="rounded-circle bg-secondary" style="width: 16px; height: 16px;"></div>
+            <div class="flex-grow-1 bg-secondary mx-2" style="height: 4px;"></div>
+            <div class="rounded-circle bg-secondary" style="width: 16px; height: 16px;"></div>
         </div>
 
-        <div class="step-labels">
-            <p class="active">Personal info</p>
-            <p>Hotel info</p>
-            <p>Room info</p>
+
+        <!-- Step labels -->
+        <div class="d-flex justify-content-between text-muted small mb-4 px-1">
+            <span class="fw-bold text-primary">Personal Info</span>
+            <span>Hotel Info</span>
+            <span>Room Info</span>
         </div>
 
-           
+        <!-- Form -->
+        <form>
 
-            <!-- Form Fields -->
-            <form>
-                <label>Full Name</label>
-                <input type="text" placeholder="enter your name">
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-control" placeholder="Enter your name">
+            </div>
 
-                <label>Email Address</label>
-                <input type="email" placeholder="enter your email">
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" placeholder="Enter your email">
+            </div>
 
-                <label>Password</label>
-                <input type="password" placeholder="enter your password">
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" placeholder="Enter your password">
+            </div>
 
-                <label>Confirm password</label>
-                <input type="password" placeholder="confirm password">
+            <div class="mb-4">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" placeholder="Confirm your password">
+            </div>
 
-                <!-- NEXT BUTTON (go to next page) -->
-               <a asp-controller="signup" asp-action="registerhotel" class="next-btn btn btn-primary">
-    Next
-</a>
+            <!-- Next Button -->
+            <a asp-controller="Signup" asp-action="RegisterHotel"
+               class="btn btn-primary w-100 py-2">
+                Next
+            </a>
 
-            </form>
+        </form>
 
-        </div>
-
-    
+    </div>
+</div>
