@@ -32,10 +32,10 @@ namespace front_end.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateAsync(int id, ReservationDto dto)
+        public async Task<bool> UpdateAsync(UpdateResrvationDto dto)
         {
             var client = _clientFactory.CreateClient("HomeAwayAPI");
-            var response = await client.PutAsJsonAsync($"reservations/{id}", dto);
+            var response = await client.PutAsJsonAsync($"reservations", dto);
             return response.IsSuccessStatusCode;
         }
 

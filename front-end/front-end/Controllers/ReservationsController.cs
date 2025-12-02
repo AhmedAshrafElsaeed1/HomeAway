@@ -36,9 +36,9 @@ namespace front_end.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(int id, ReservationDto dto)
+        public async Task<IActionResult> Update(UpdateResrvationDto dto)
         {
-            var result = await _reservationService.UpdateAsync(id, dto);
+            var result = await _reservationService.UpdateAsync(dto);
             return result ? RedirectToAction("Index") : NotFound();
         }
 

@@ -7,7 +7,7 @@ namespace front_end.Interfaces
         Task<List<ReservationDto>> GetAllAsync();
         Task<ReservationDto?> GetByIdAsync(int id);
         Task<bool> CreateAsync(ReservationDto dto);
-        Task<bool> UpdateAsync(int id, ReservationDto dto);
+        Task<bool> UpdateAsync(UpdateResrvationDto dto);
         Task<bool> DeleteAsync(int id);
     }
 }

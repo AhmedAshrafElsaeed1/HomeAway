@@ -39,7 +39,7 @@ namespace front_end.Services
             return (int?)createdObj?.id;
         }
 
-        public async Task<bool> UpdateAsync(HotelDto dto)
+        public async Task<bool> UpdateAsync(UpdateHotelDto dto)
         {
             var client = _clientFactory.CreateClient("HomeAwayAPI");
             var response = await client.PutAsJsonAsync("hotels", dto);

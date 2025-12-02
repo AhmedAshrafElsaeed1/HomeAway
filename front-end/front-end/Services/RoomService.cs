@@ -44,7 +44,7 @@ namespace front_end.Services
             return null;
         }
 
-        public async Task<bool> UpdateAsync(RoomDto dto)
+        public async Task<bool> UpdateAsync(UpdateRoomDto dto)
         {
             var client = _clientFactory.CreateClient("HomeAwayAPI");
             var response = await client.PutAsJsonAsync("rooms", dto);

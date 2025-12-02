@@ -35,7 +35,7 @@ namespace front_end.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(RoomDto dto)
+        public async Task<IActionResult> Update(UpdateRoomDto dto)
         {
             var ok = await _roomService.UpdateAsync(dto);
             return ok ? RedirectToAction("Index") : NotFound();
