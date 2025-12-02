@@ -1,9 +1,13 @@
-﻿@{
-    ViewData["Title"] = "Admin Dashboard";
+﻿@model front_end.ViewModel.AdminViewModel
+@using front_end.DTOs
+
+@{
+    ViewData["Title"] = "Dashboard";
     Layout = "_Layout";
 }
 
 <div class="admin-layout">
+    <!-- Sidebar -->
     <aside class="admin-sidebar">
         <div class="admin-logo">HomeAway Admin</div>
         <nav class="admin-nav">
@@ -15,19 +19,24 @@
             <a href="#"><i class="fas fa-cog"></i> Settings</a>
         </nav>
     </aside>
+
+    <!-- Main content -->
     <div class="admin-main-content">
+        <!-- Header -->
         <div class="admin-header">
             <h2>Admin Dashboard</h2>
             <button class="btn-admin-user">Admin User</button>
         </div>
 
+        <!-- Stats cards -->
         <div class="stats-admin-grid">
-            <div class="stat-card light-blue">156 <p>Total Bookings</p></div>
-            <div class="stat-card light-green">$45.2K <p>Revenue</p></div>
-            <div class="stat-card light-yellow">42 <p>Pending</p></div>
-            <div class="stat-card light-red">8 <p>Cancelled</p></div>
+            <div class="stat-card light-blue">@Model.TotalBookings <p>Total Bookings</p></div>
+            <div class="stat-card light-green">$@Model.TotalRevenue <p>Revenue</p></div>
+            <div class="stat-card light-yellow">@Model.Pending <p>Pending</p></div>
+            <div class="stat-card light-red">@Model.Cancelled <p>Cancelled</p></div>
         </div>
 
+        <!-- Recent Bookings Table -->
         <h3 class="section-title">Recent Bookings</h3>
         <table class="recent-bookings-table">
             <thead>
@@ -42,18 +51,35 @@
                     <th>Action</th>
                 </tr>
             </thead>
+            @{
+                var reservations = Model.Reservations ?? new List<ReservationDto>();
+            }
             <tbody>
-                <tr>
-                    <td>#B9001</td>
-                    <td>John Doe</td>
-                    <td>Grand Plaza</td>
-                    <td>2024-12-15</td>
-                    <td>2024-12-18</td>
-                    <td>$656.70</td>
-                    <td><span class="status confirmed">Confirmed</span></td>
-                    <td><button class="btn-view">View</button></td>
-                </tr>
+                @foreach (var r in reservations)
+                {
+                    <tr>
+                        <td>#@r.Id</td>
+                        <td>@r.UserId</td>
+                        <td>@r.RoomId</td>
+                        <td>@r.From.ToString("yyyy-MM-dd")</td>
+                        <td>@r.To.ToString("yyyy-MM-dd")</td>
+                        <td>$@r.TotalPrice.ToString("0.00")</td>
+                        <td>
+                            @{
+                                string statusText = r.Status == 0 ? "Pending" :
+                                r.Status == 1 ? "Confirmed" :
+                                r.Status == 2 ? "Cancelled" : "Completed";
+                                string statusClass = r.Status == 0 ? "pending" :
+                                r.Status == 1 ? "confirmed" :
+                                r.Status == 2 ? "cancelled" : "completed";
+                            }
+                            <span class="status @statusClass">@statusText</span>
+                        </td>
+                        <td><button class="btn-view">View</button></td>
+                    </tr>
+                }
             </tbody>
+
         </table>
     </div>
 </div>

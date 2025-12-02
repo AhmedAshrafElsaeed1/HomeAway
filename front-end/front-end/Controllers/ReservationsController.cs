@@ -4,48 +4,73 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace front_end.Controllers
 {
-    public class ReservationsController : Controller     //  dont use for now !!!!!!!!!!
+    public class ReservationController : Controller
     {
         private readonly IReservationService _reservationService;
 
-        public ReservationsController(IReservationService reservationService)
+        public ReservationController(IReservationService reservationService)
         {
             _reservationService = reservationService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> AdminList()
         {
             var reservations = await _reservationService.GetAllAsync();
             return View(reservations);
         }
 
+        public async Task<IActionResult> Accept(int id)
+        {
+            var reservation = await _reservationService.GetByIdAsync(id);
+            if (reservation == null)
+                return NotFound();
+
+            reservation.Status = 1; // confirmed
+
+            var updateDto = new UpdateResrvationDto
+            {
+                Id = reservation.Id,
+               
+                From = reservation.From,
+                To = reservation.To,
+                Status = reservation.Status,
+                
+            };
+
+            await _reservationService.UpdateAsync(updateDto);
+            return RedirectToAction("AdminList");
+        }
+
+        public async Task<IActionResult> Reject(int id)
+        {
+            var reservation = await _reservationService.GetByIdAsync(id);
+            if (reservation == null)
+                return NotFound();
+
+            reservation.Status = 2; // canceled
+
+            var updateDto = new UpdateResrvationDto
+            {
+                Id = reservation.Id,
+                
+                From = reservation.From,
+                To = reservation.To,
+                Status = reservation.Status,
+              
+            };
+
+            await _reservationService.UpdateAsync(updateDto);
+            return RedirectToAction("AdminList");
+        }
+
         public async Task<IActionResult> Details(int id)
         {
             var reservation = await _reservationService.GetByIdAsync(id);
-            return reservation == null ? NotFound() : View(reservation);
-        }
+            if (reservation == null)
+                return NotFound();
 
-        [HttpPost]
-        public async Task<IActionResult> Create(ReservationDto dto)
-        {
-            var result = await _reservationService.CreateAsync(dto);
-            if (!result)
-                return BadRequest();
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Update(UpdateResrvationDto dto)
-        {
-            var result = await _reservationService.UpdateAsync(dto);
-            return result ? RedirectToAction("Index") : NotFound();
-        }
-
-        public async Task<IActionResult> Delete(int id)
-        {
-            var result = await _reservationService.DeleteAsync(id);
-            return result ? RedirectToAction("Index") : NotFound();
+            return View(reservation);
         }
     }
 }
+

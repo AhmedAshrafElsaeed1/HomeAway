@@ -1,50 +1,36 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using front_end.Auth;
+﻿using front_end.DTOs;
 using front_end.Interfaces;
+using front_end.ViewModel;
+using Microsoft.AspNetCore.Mvc;
 
 
-namespace front_end.Controllers
+namespace HotelsMVC.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
-        public AdminController(IAdminService adminService)
+        private readonly IReservationService _reservationService;
+
+        public AdminController(IAdminService adminService, IReservationService reservationService)
         {
             _adminService = adminService;
-        }
-        public async Task<IActionResult> Users()
-        {
-            var users = await _adminService.GetAllUsersAsync();
-            return View(users);
+            _reservationService = reservationService;
         }
 
-        [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Dashboard()
         {
-            return View();
-        }
+            var reservations = await _reservationService.GetAllAsync();
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterDto dto)
-        {
-            var success = await _adminService.RegisterAdminAsync(dto);
-
-            if (!success)
+            var model = new AdminViewModel
             {
-                ViewBag.Error = "Failed to register admin.";
-                return View(dto);
-            }
+                Reservations = reservations ?? new List<ReservationDto>(),
+                // لو عندك Hotels:
+                // Hotels = await _hotelService.GetAllAsync() ?? new List<HotelDto>()
+            };
 
-            return RedirectToAction("Users");
+            return View("Dashboard", model); // تحدد اسم الفيو صراحة
         }
 
-
-
-
-
-        public IActionResult dashboard()
-        {
-            return View();
-        }
     }
 }
+
