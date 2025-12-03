@@ -13,6 +13,7 @@ namespace front_end.ViewModel
         // قائمة الفنادق (لو موجودة)
         public List<HotelDto>? Hotels { get; set; }
         public List<UserDto>? Users { get; set; }
+        public List<RoomDto>? Rooms { get; set; }
 
         // حسابات جاهزة للإحصائيات
         public int TotalBookings => Reservations?.Count ?? 0;
