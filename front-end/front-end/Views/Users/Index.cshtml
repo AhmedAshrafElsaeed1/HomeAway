@@ -12,8 +12,7 @@
     </aside>
     <div class="admin-main-content">
 
-        <!-- Recent Bookings Table -->
-        <h3 class="section-title">Recent Bookings</h3>
+        <h3 class="section-title">Users</h3>
         <table class="recent-bookings-table">
             <thead>
                 <tr>
@@ -41,7 +40,7 @@
                                 Ban
                             </a>
 
-                            <a href="@Url.Action("Accept", "Reservation", new { id = user.Id })"
+                            <a href="@Url.Action("MakeAdmin", "Admin", new { id = user.Id })"
                                class="btn btn-info btn-outline-dark text-white">
                                 Make Admin
                             </a>

@@ -9,5 +9,7 @@ namespace front_end.Interfaces
         Task<bool> RegisterAdminAsync(RegisterDto dto);
         Task<decimal> HomeAwayProfit();
         Task<bool> DeleteUserAsync(String id);
+        Task<bool> PromoteUserToAdminAsync(String id);
+
     }
 }

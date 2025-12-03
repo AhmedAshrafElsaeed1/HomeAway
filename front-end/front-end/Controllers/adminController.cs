@@ -75,6 +75,25 @@ namespace HotelsMVC.Controllers
             }
 
         }
+        public async Task<IActionResult> MakeAdmin(string id)
+        {
+            try
+            {
+                if (await _adminService.PromoteUserToAdminAsync(id))
+                {
+                    return RedirectToAction("Index", "Users");
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+        }
 
     }
 }

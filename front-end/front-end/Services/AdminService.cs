@@ -45,6 +45,11 @@ namespace front_end.Services
             var response = await _httpClient.DeleteAsync($"Admin/{id}");
             return response.IsSuccessStatusCode;
         }
+        public async Task<bool> PromoteUserToAdminAsync(String id)
+        {
+            var response = await _httpClient.PostAsync($"Admin/Promote/{id}", null);
+            return response.IsSuccessStatusCode;
+        }
 
     }
 }
