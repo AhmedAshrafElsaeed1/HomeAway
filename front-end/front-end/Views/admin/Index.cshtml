@@ -1,5 +1,75 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model front_end.ViewModel.AdminViewModel
+@using front_end.DTOs
+<!-- Main content -->
+<div class="admin-main-content">
+    <!-- Header -->
+    <div class="admin-header">
+        <h2>Admin Dashboard</h2>
+        <button class="btn-admin-user">Admin User</button>
+    </div>
+
+    <!-- Stats cards -->
+    <div class="stats-admin-grid">
+        <div class="stat-card light-blue">@Model.TotalBookings <p>Total Bookings</p></div>
+        <div class="stat-card light-green">$@Model.TotalRevenue.ToString("0.00") <p>Revenue</p></div>
+        <div class="stat-card light-yellow">@Model.Pending <p>Pending</p></div>
+        <div class="stat-card light-red">@Model.Cancelled <p>Cancelled</p></div>
+    </div>
+
+    <!-- Recent Bookings Table -->
+    <h3 class="section-title">Recent Bookings</h3>
+    <table class="recent-bookings-table">
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>Customer</th>
+                <th>Hotel</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        @{
+            var reservations = Model.Reservations ?? new List<ReservationDto>();
+        }
+        <tbody>
+            @foreach (var r in reservations)
+            {
+                <tr>
+                    <td>#@r.Id</td>
+                    <td>@Model.Users.FirstOrDefault(u => u.Id == r.UserId)?.FullName</td>
+                    <td>@Model.Hotels.FirstOrDefault(h => h.Id == r.RoomId)?.Name</td>
+                    <td>@r.From.ToString("d")</td>
+                    <td>@r.To.ToString("d")</td>
+                    <td>$@r.TotalPrice.ToString("0.00")</td>
+                    <td>
+                        @{
+                            string statusText = r.Status == 0 ? "Pending" :
+                            r.Status == 1 ? "Confirmed" :
+                            r.Status == 2 ? "Cancelled" : "Completed";
+                            string statusClass = r.Status == 0 ? "pending bg-warning" :
+                            r.Status == 1 ? "confirmed bg-success" :
+                            r.Status == 2 ? "cancelled bg-danger" : "completed bg-success";
+                        }
+                        <span class="status @statusClass">@statusText</span>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Reject", "Reservation", new { id = r.Id })"
+                           class="btn btn-danger btn-outline-dark text-white">
+                            Cancelled
+                        </a>
+
+                        <a href="@Url.Action("Accept", "Reservation", new { id = r.Id })"
+                           class="btn btn-success btn-outline-dark text-white">
+                            Confirmed
+                        </a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>

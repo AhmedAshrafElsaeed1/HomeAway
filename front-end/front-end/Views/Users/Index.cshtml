@@ -1,0 +1,56 @@
+﻿@model front_end.ViewModel.UsersViewModel
+@using front_end.DTOs
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <div class="admin-logo">HomeAway Admin</div>
+        <nav class="admin-nav">
+            <a href="@Url.Action("Dashboard", "Admin")"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="@Url.Action("Index", "Rooms")"><i class="fas fa-bed"></i> Rooms</a>
+            <a href="@Url.Action("Index", "Reservation")"><i class="fas fa-book"></i> Bookings</a>
+            <a href="@Url.Action("Index", "Users")" class="active"><i class="fas fa-users"></i> Customers</a>
+        </nav>
+    </aside>
+    <div class="admin-main-content">
+
+        <!-- Recent Bookings Table -->
+        <h3 class="section-title">Recent Bookings</h3>
+        <table class="recent-bookings-table">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            @{
+                var Users = Model.Users ?? new List<UserDto>();
+            }
+            <tbody>
+                @foreach (var user in Users)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>@user.Role.FirstOrDefault()</td>
+                        <td>
+                            <a href="@Url.Action("Ban", "Users", new { id = user.Id })"
+                               class="btn btn-danger btn-outline-dark text-white">
+                                Ban
+                            </a>
+
+                            <a href="@Url.Action("Accept", "Reservation", new { id = user.Id })"
+                               class="btn btn-info btn-outline-dark text-white">
+                                Make Admin
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>

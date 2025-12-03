@@ -11,12 +11,10 @@
     <aside class="admin-sidebar">
         <div class="admin-logo">HomeAway Admin</div>
         <nav class="admin-nav">
-            <a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            <a href="#"><i class="fas fa-bed"></i> Rooms</a>
-            <a href="#"><i class="fas fa-book"></i> Bookings</a>
-            <a href="#"><i class="fas fa-users"></i> Customers</a>
-            <a href="#"><i class="fas fa-chart-line"></i> Reports</a>
-            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            <a href="@Url.Action("Dashboard", "Admin")" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="@Url.Action("Index", "Rooms")"><i class="fas fa-bed"></i> Rooms</a>
+            <a href="@Url.Action("Index", "Reservation")"><i class="fas fa-book"></i> Bookings</a>
+            <a href="@Url.Action("Index", "Users")"><i class="fas fa-users"></i> Customers</a>
         </nav>
     </aside>
 

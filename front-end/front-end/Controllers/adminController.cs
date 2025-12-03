@@ -38,6 +38,24 @@ namespace HotelsMVC.Controllers
 
             return View("Dashboard", model); // تحدد اسم الفيو صراحة
         }
+        public async Task<IActionResult> Index()
+        {
+            var reservations = await _reservationService.GetAllAsync();
+            var hotels = await _hotelService.GetAllAsync();
+            var users = await _adminService.GetAllUsersAsync();
+            decimal totalRevenue = await _adminService.HomeAwayProfit();
+
+            var model = new AdminViewModel
+            {
+                Reservations = reservations ?? new List<ReservationDto>(),
+                Hotels = hotels ?? new List<HotelDto>(),
+                Users = users ?? new List<UserDto>(),
+                TotalRevenue = totalRevenue,
+
+            };
+
+            return View("Dashboard", model); // تحدد اسم الفيو صراحة
+        }
 
     }
 }

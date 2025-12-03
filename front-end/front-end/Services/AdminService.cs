@@ -40,6 +40,11 @@ namespace front_end.Services
             Decimal profit = await response.Content.ReadFromJsonAsync<Decimal>();
             return profit;
         }
+        public async Task<bool> DeleteUserAsync(String id)
+        {
+            var response = await _httpClient.DeleteAsync($"Admin/{id}");
+            return response.IsSuccessStatusCode;
+        }
 
     }
 }
