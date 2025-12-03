@@ -59,8 +59,8 @@
                 {
                     <tr>
                         <td>#@r.Id</td>
-                        <td>@Model.Users.FirstOrDefault(u => u.Id == r.UserId)?.FullName ?? "Unknown User"</td>
-                        <td>@Model.Hotels.FirstOrDefault(h => h.Id == r.RoomId)?.Name ?? "Unknown Hotel"</td>
+                        <td>@Model.Users.FirstOrDefault(u => u.Id == r.UserId)?.FullName</td>
+                        <td>@Model.Hotels.FirstOrDefault(h => h.Id == r.RoomId)?.Name</td>
                         <td>@r.From.ToString("d")</td>
                         <td>@r.To.ToString("d")</td>
                         <td>$@r.TotalPrice.ToString("0.00")</td>

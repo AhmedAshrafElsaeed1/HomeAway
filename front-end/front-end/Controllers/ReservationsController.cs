@@ -38,7 +38,7 @@ namespace front_end.Controllers
             };
 
             await _reservationService.UpdateAsync(updateDto);
-            return RedirectToAction("AdminList");
+            return RedirectToAction("Dashboard","Admin");
         }
 
         public async Task<IActionResult> Reject(int id)
@@ -60,7 +60,7 @@ namespace front_end.Controllers
             };
 
             await _reservationService.UpdateAsync(updateDto);
-            return RedirectToAction("AdminList");
+            return RedirectToAction("Dashboard", "Admin");
         }
 
         public async Task<IActionResult> Details(int id)
