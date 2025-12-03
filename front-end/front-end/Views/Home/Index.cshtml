@@ -5,26 +5,24 @@
 
 <section class="hero-section">
     <div class="search-box-container">
-        <div class="search-box">
+        <form asp-controller="Home" asp-action="Search" method="post" class="search-box">
             <h2>Find Your Perfect Stay</h2>
             <div class="search-inputs">
-                <input type="text" placeholder="Where are you going?" class="input-destination">
-                <input type="date" class="input-date">
-                <input type="date" class="input-date">
-                <select>
-                    <option>1 Guest</option>
-                    <option>2 Guests</option>
-                    <option>3 Guests</option>
-                    <option>4 Guests</option>
-                    <option>5 Guests</option>
+                <input type="text" name="destination" placeholder="Where are you going?" class="input-destination" />
+                <input type="date" name="checkIn" class="input-date" />
+                <input type="date" name="checkOut" class="input-date" />
+                <select name="guests">
+                    <option value="1">1 Guest</option>
+                    <option value="2">2 Guests</option>
+                    <option value="3">3 Guests</option>
+                    <option value="4">4 Guests</option>
+                    <option value="5">5 Guests</option>
                 </select>
-
-                <button class="btn btn-search"><i class="fas fa-search"></i> Search</button>
+                <button type="submit" class="btn btn-search"><i class="fas fa-search"></i> Search</button>
             </div>
-        </div>
+        </form>
     </div>
 </section>
-
 <h2 class="section-title">Featured Hotels</h2>
 <div class="featured-hotel-card">
     <img src="~/images/pic2.jpg" alt="Grand Plaza Hotel">

@@ -1,9 +1,12 @@
-﻿@{
-    ViewData["Title"] = "Search";
-    Layout = "_Layout";
+﻿@model front_end.ViewModel.SearchViewModel
+
+@{
+    var results = Model?.Results ?? new List<front_end.DTOs.HotelDto>();
 }
 
+
 <div class="search-layout">
+    <!-- Sidebar Filters -->
     <aside class="sidebar-filter">
         <h3>Filters</h3>
         <div class="filter-group">
@@ -11,11 +14,13 @@
             <input type="range" min="0" max="1000" value="500">
             <div class="range-display">$0 - $1000</div>
         </div>
+
         <div class="filter-group">
             <h4>Star Rating</h4>
             <div class="rating-checkbox">⭐⭐⭐⭐⭐</div>
             <div class="rating-checkbox">⭐⭐⭐⭐ & up</div>
         </div>
+
         <div class="filter-group">
             <h4>Amenities</h4>
 
@@ -38,74 +43,42 @@
         <button class="btn btn-apply">Apply Filters</button>
     </aside>
 
+    <!-- Results List -->
     <div class="results-list">
-        <h2>125 hotels found in New York</h2>
 
-        <div class="hotel-result-card">
-            <img src="~/images/pic1.jpg" alt="Grand Plaza Hotel">
-            <div class="info">
-                <h3>Grand Plaza Hotel</h3>
-                <p>Manhattan, New York</p>
-                <div class="rating">4.5 (128 reviews)</div>
-                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
-            </div>
-            <div class="price-action">
-                <div class="price">$199 <span>per night</span></div>
-                <button class="btn btn-select" data-page="reserve">Select Room</button>
-            </div>
-        </div>
-        <div class="hotel-result-card">
-            <img src="~/images/pic6.jpg" alt="Grand Plaza Hotel">
-            <div class="info">
-                <h3>Grand Plaza Hotel</h3>
-                <p>Manhattan, New York</p>
-                <div class="rating">4.5 (128 reviews)</div>
-                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
-            </div>
-            <div class="price-action">
-                <div class="price">$199 <span>per night</span></div>
-                <button class="btn btn-select" data-page="reserve">Select Room</button>
-            </div>
-        </div>
-        <div class="hotel-result-card">
-            <img src="~/images/pic4.jpg" alt="Grand Plaza Hotel">
-            <div class="info">
-                <h3>Grand Plaza Hotel</h3>
-                <p>Manhattan, New York</p>
-                <div class="rating">4.5 (128 reviews)</div>
-                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
-            </div>
-            <div class="price-action">
-                <div class="price">$199 <span>per night</span></div>
-                <button class="btn btn-select" data-page="reserve">Select Room</button>
-            </div>
-        </div>
-        <div class="hotel-result-card">
-            <img src="~/images/pic3.jpg" alt="Grand Plaza Hotel">
-            <div class="info">
-                <h3>Grand Plaza Hotel</h3>
-                <p>Manhattan, New York</p>
-                <div class="rating">4.5 (128 reviews)</div>
-                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
-            </div>
-            <div class="price-action">
-                <div class="price">$199 <span>per night</span></div>
-                <button class="btn btn-select" data-page="reserve">Select Room</button>
-            </div>
-        </div>
-        <div class="hotel-result-card">
-            <img src="~/images/pic2.jpg" alt="Grand Plaza Hotel">
-            <div class="info">
-                <h3>Grand Plaza Hotel</h3>
-                <p>Manhattan, New York</p>
-                <div class="rating">4.5 (128 reviews)</div>
-                <div class="amenities-list"><span>Free WiFi</span><span>Pool</span><span>Spa</span></div>
-            </div>
-            <div class="price-action">
-                <div class="price">$199 <span>per night</span></div>
-                <button class="btn btn-select" data-page="reserve">Select Room</button>
-            </div>
-        </div>
+        <h2>
+            @(Model?.Results?.Count ?? 0) hotels found
+            @if (!string.IsNullOrEmpty(Model?.Destination))
+            {
+                @: in @Model.Destination
+            }
+        </h2>
+
+        @if (Model?.Results != null && Model.Results.Any())
+        {
+            @foreach (var hotel in Model.Results)
+            {
+                <div class="hotel-result-card">
+                    <img src="~/images/pic1.jpg" alt="Hotel Image">
+
+                    <div class="info">
+                        <h3>@hotel.Name</h3>
+                        <p>@hotel.Address</p>
+                        <div class="rating">@hotel.Rating</div>
+                        <div class="amenities-list">
+                            <!-- لو عندك Amenities ممكن تحطيها هنا -->
+                        </div>
+                    </div>
+
+                    <div class="price-action">
+                        <button class="btn btn-select">Select Room</button>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No hotels found matching your search criteria.</p>
+        }
     </div>
 </div>
-
