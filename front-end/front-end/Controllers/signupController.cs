@@ -6,23 +6,68 @@ namespace front_end.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
         public IActionResult AsCustomer()
         {
-            return View("ascustomer");
+            try
+            {
+                return View("ascustomer");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
         public IActionResult Ashotelowner()
         {
-            return View("ashotelowner");
+            try
+            {
+                return View("ashotelowner");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
         public IActionResult registerhotel()
         {
-            return View("registerhotel");
+            try
+            {
+                return View("registerhotel");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
         public IActionResult Rooms()
         {
-            return View("rooms");
+            try
+            {
+                return View("rooms");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
     }
 }

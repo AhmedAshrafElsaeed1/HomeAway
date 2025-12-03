@@ -14,14 +14,34 @@ namespace front_end.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var hotels = await _hotelService.GetAllAsync();
-            return View(hotels);
+            try
+            {
+                var hotels = await _hotelService.GetAllAsync();
+                return View(hotels);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var hotel = await _hotelService.GetByIdAsync(id);
-            return hotel == null ? NotFound() : View(hotel);
+            try
+            {
+                var hotel = await _hotelService.GetByIdAsync(id);
+                return hotel == null ? NotFound() : View(hotel);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
     }
 }

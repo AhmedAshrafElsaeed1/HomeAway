@@ -15,36 +15,81 @@ namespace front_end.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var rooms = await _roomService.GetAllAsync();
-            return View(rooms);
+            try
+            {
+                var rooms = await _roomService.GetAllAsync();
+                return View(rooms);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var room = await _roomService.GetByIdAsync(id);
-            return room == null ? NotFound() : View(room);
+            try
+            {
+                var room = await _roomService.GetByIdAsync(id);
+                return room == null ? NotFound() : View(room);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(RoomDto dto)
         {
-            var id = await _roomService.CreateAsync(dto);
-            if (id == null) return BadRequest();
+            try
+            {
+                var id = await _roomService.CreateAsync(dto);
+                if (id == null) return BadRequest();
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(UpdateRoomDto dto)
         {
-            var ok = await _roomService.UpdateAsync(dto);
-            return ok ? RedirectToAction("Index") : NotFound();
+            try
+            {
+                var ok = await _roomService.UpdateAsync(dto);
+                return ok ? RedirectToAction("Index") : NotFound();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            var ok = await _roomService.DeleteAsync(id);
-            return ok ? RedirectToAction("Index") : NotFound();
+            try
+            {
+                var ok = await _roomService.DeleteAsync(id);
+                return ok ? RedirectToAction("Index") : NotFound();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
     }
 

@@ -16,36 +16,52 @@ namespace front_end.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            // جيبي كل الفنادق
-            var allHotels = await _hotelService.GetAllAsync();
-
-            // اعملي الموديل
-            var model = new SearchViewModel
+            try
             {
-                Results = allHotels,
-                Destination = "All Hotels"
-            };
+                var allHotels = await _hotelService.GetAllAsync();
 
-            return View(model);
+                var model = new SearchViewModel
+                {
+                    Results = allHotels,
+                    Destination = "All Hotels"
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(string destination)
         {
-            var allHotels = await _hotelService.GetAllAsync();
-
-            var filtered = allHotels
-                .Where(h => string.IsNullOrEmpty(destination) ||
-                            h.Address.Contains(destination, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            var model = new SearchViewModel
+            try
             {
-                Results = filtered,
-                Destination = destination
-            };
+                var allHotels = await _hotelService.GetAllAsync();
 
-            return View(model);
+                var filtered = allHotels
+                    .Where(h => string.IsNullOrEmpty(destination) ||
+                                h.Address.Contains(destination, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                var model = new SearchViewModel
+                {
+                    Results = filtered,
+                    Destination = destination
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
     }
 }

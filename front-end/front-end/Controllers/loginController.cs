@@ -15,11 +15,21 @@ namespace front_end.Controllers
         }
         public IActionResult Index(LoginDto loginDto)
         {
-            //LoginDto user = new LoginDto();
-            //user.UserName = Request.Form["UserName"];
-            //user.Password = Request.Form["Password"];
-            //var result = authService.LoginAsync(loginDto);
-            return View();
+
+            try
+            {
+                //LoginDto user = new LoginDto();
+                //user.UserName = Request.Form["UserName"];
+                //user.Password = Request.Form["Password"];
+                //var result = authService.LoginAsync(loginDto);
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
         }
     }
 }

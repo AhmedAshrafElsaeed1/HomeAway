@@ -16,25 +16,44 @@ namespace front_end.Controllers
         // الصفحة الرئيسية
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                return View();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
         }
 
         // GET: Search page (from navbar)
         [HttpGet]
         public async Task<IActionResult> Search()
         {
-            var hotels = await _hotelService.GetAllAsync();
-
-            var model = new SearchViewModel
+            try
             {
-                Results = hotels,   // هنا المهم جداً
-                Destination = "",
-                CheckIn = "",
-                CheckOut = "",
-                Guests = 1
-            };
+                var hotels = await _hotelService.GetAllAsync();
 
-            return View(model);
+                var model = new SearchViewModel
+                {
+                    Results = hotels,   // هنا المهم جداً
+                    Destination = "",
+                    CheckIn = "",
+                    CheckOut = "",
+                    Guests = 1
+                };
+
+                return View(model);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
 
@@ -42,24 +61,34 @@ namespace front_end.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(string destination, string checkIn, string checkOut, int guests)
         {
-            var allHotels = await _hotelService.GetAllAsync();
-
-            var filteredHotels = allHotels
-                .FindAll(h =>
-                    string.IsNullOrEmpty(destination) ||
-                    h.Address.Contains(destination, StringComparison.OrdinalIgnoreCase)
-                );
-
-            var model = new SearchViewModel
+            try
             {
-                Results = filteredHotels,
-                Destination = destination,
-                CheckIn = checkIn,
-                CheckOut = checkOut,
-                Guests = guests
-            };
+                var allHotels = await _hotelService.GetAllAsync();
 
-            return View("~/Views/Search/Index.cshtml", model);
+                var filteredHotels = allHotels
+                    .FindAll(h =>
+                        string.IsNullOrEmpty(destination) ||
+                        h.Address.Contains(destination, StringComparison.OrdinalIgnoreCase)
+                    );
+
+                var model = new SearchViewModel
+                {
+                    Results = filteredHotels,
+                    Destination = destination,
+                    CheckIn = checkIn,
+                    CheckOut = checkOut,
+                    Guests = guests
+                };
+
+                return View("~/Views/Search/Index.cshtml", model);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
     }
 }

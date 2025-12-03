@@ -13,26 +13,41 @@ namespace front_end.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var users = await _adminService.GetAllUsersAsync();
-            UsersViewModel usersViewModel = new UsersViewModel()
+            try
             {
-                Users = users
-            };
-            return View(usersViewModel);
+                var users = await _adminService.GetAllUsersAsync();
+                UsersViewModel usersViewModel = new UsersViewModel()
+                {
+                    Users = users
+                };
+                return View(usersViewModel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
         public async Task<IActionResult> Ban(string id)
         {
-            if (await _adminService.DeleteUserAsync(id))
+            try
             {
+                if (await _adminService.DeleteUserAsync(id))
+                {
 
-                return RedirectToAction("Index", "Users");
+                    return RedirectToAction("Index", "Users");
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest();
+                Console.WriteLine(ex.Message);
+                return View("Error");
             }
-
-
         }
     }
 }

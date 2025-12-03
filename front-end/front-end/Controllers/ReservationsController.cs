@@ -15,61 +15,97 @@ namespace front_end.Controllers
 
         public async Task<IActionResult> AdminList()
         {
-            var reservations = await _reservationService.GetAllAsync();
-            return View(reservations);
+            try
+            {
+                var reservations = await _reservationService.GetAllAsync();
+                return View(reservations);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         public async Task<IActionResult> Accept(int id)
         {
-            var reservation = await _reservationService.GetByIdAsync(id);
-            if (reservation == null)
-                return NotFound();
-
-            reservation.Status = 1; // confirmed
-
-            var updateDto = new UpdateResrvationDto
+            try
             {
-                Id = reservation.Id,
-               
-                From = reservation.From,
-                To = reservation.To,
-                Status = reservation.Status,
-                
-            };
+                var reservation = await _reservationService.GetByIdAsync(id);
+                if (reservation == null)
+                    return NotFound();
 
-            await _reservationService.UpdateAsync(updateDto);
-            return RedirectToAction("Dashboard","Admin");
+                reservation.Status = 1; // confirmed
+
+                var updateDto = new UpdateResrvationDto
+                {
+                    Id = reservation.Id,
+
+                    From = reservation.From,
+                    To = reservation.To,
+                    Status = reservation.Status,
+
+                };
+
+                await _reservationService.UpdateAsync(updateDto);
+                return RedirectToAction("Dashboard", "Admin");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         public async Task<IActionResult> Reject(int id)
         {
-            var reservation = await _reservationService.GetByIdAsync(id);
-            if (reservation == null)
-                return NotFound();
-
-            reservation.Status = 2; // canceled
-
-            var updateDto = new UpdateResrvationDto
+            try
             {
-                Id = reservation.Id,
-                
-                From = reservation.From,
-                To = reservation.To,
-                Status = reservation.Status,
-              
-            };
+                var reservation = await _reservationService.GetByIdAsync(id);
+                if (reservation == null)
+                    return NotFound();
 
-            await _reservationService.UpdateAsync(updateDto);
-            return RedirectToAction("Dashboard", "Admin");
+                reservation.Status = 2; // canceled
+
+                var updateDto = new UpdateResrvationDto
+                {
+                    Id = reservation.Id,
+
+                    From = reservation.From,
+                    To = reservation.To,
+                    Status = reservation.Status,
+
+                };
+
+                await _reservationService.UpdateAsync(updateDto);
+                return RedirectToAction("Dashboard", "Admin");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
 
         public async Task<IActionResult> Details(int id)
         {
-            var reservation = await _reservationService.GetByIdAsync(id);
-            if (reservation == null)
-                return NotFound();
+            try
+            {
+                var reservation = await _reservationService.GetByIdAsync(id);
+                if (reservation == null)
+                    return NotFound();
 
-            return View(reservation);
+                return View(reservation);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
+
         }
     }
 }
