@@ -20,7 +20,7 @@ namespace front_end.Services
             if (!response.IsSuccessStatusCode)
                 return new List<UserDto>();
 
-            var users = await response.Content.ReadFromJsonAsync<List<UserDto>>();
+            List<UserDto> users = await response.Content.ReadFromJsonAsync<List<UserDto>>();
             return users ?? new List<UserDto>();
         }
 
@@ -30,5 +30,16 @@ namespace front_end.Services
 
             return response.IsSuccessStatusCode;
         }
+        public async Task<decimal> HomeAwayProfit()
+        {
+            var response = await _httpClient.GetAsync("Admin/profit");
+
+            if (!response.IsSuccessStatusCode)
+                return -1;
+
+            Decimal profit = await response.Content.ReadFromJsonAsync<Decimal>();
+            return profit;
+        }
+
     }
 }

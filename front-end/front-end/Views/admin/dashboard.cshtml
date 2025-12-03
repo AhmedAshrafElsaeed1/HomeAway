@@ -31,7 +31,7 @@
         <!-- Stats cards -->
         <div class="stats-admin-grid">
             <div class="stat-card light-blue">@Model.TotalBookings <p>Total Bookings</p></div>
-            <div class="stat-card light-green">$@Model.TotalRevenue <p>Revenue</p></div>
+            <div class="stat-card light-green">$@Model.TotalRevenue.ToString("0.00") <p>Revenue</p></div>
             <div class="stat-card light-yellow">@Model.Pending <p>Pending</p></div>
             <div class="stat-card light-red">@Model.Cancelled <p>Cancelled</p></div>
         </div>
@@ -59,23 +59,34 @@
                 {
                     <tr>
                         <td>#@r.Id</td>
-                        <td>@r.UserId</td>
-                        <td>@r.RoomId</td>
-                        <td>@r.From.ToString("yyyy-MM-dd")</td>
-                        <td>@r.To.ToString("yyyy-MM-dd")</td>
+                        <td>@Model.Users.FirstOrDefault(u => u.Id == r.UserId)?.FullName ?? "Unknown User"</td>
+                        <td>@Model.Hotels.FirstOrDefault(h => h.Id == r.RoomId)?.Name ?? "Unknown Hotel"</td>
+                        <td>@r.From.ToString("d")</td>
+                        <td>@r.To.ToString("d")</td>
                         <td>$@r.TotalPrice.ToString("0.00")</td>
                         <td>
                             @{
                                 string statusText = r.Status == 0 ? "Pending" :
                                 r.Status == 1 ? "Confirmed" :
                                 r.Status == 2 ? "Cancelled" : "Completed";
-                                string statusClass = r.Status == 0 ? "pending" :
-                                r.Status == 1 ? "confirmed" :
-                                r.Status == 2 ? "cancelled" : "completed";
+                                string statusClass = r.Status == 0 ? "pending bg-warning" :
+                                r.Status == 1 ? "confirmed bg-success" :
+                                r.Status == 2 ? "cancelled bg-danger" : "completed bg-success";
                             }
                             <span class="status @statusClass">@statusText</span>
                         </td>
-                        <td><button class="btn-view">View</button></td>
+                        <td>
+                            <a href="@Url.Action("Reject", "Reservation", new { id = r.Id })"
+                               class="btn btn-danger btn-outline-dark text-white">
+                                Cancelled
+                            </a>
+
+                            <a href="@Url.Action("Accept", "Reservation", new { id = r.Id })"
+                               class="btn btn-success btn-outline-dark text-white">
+                                Confirmed
+                            </a>
+                        </td>
+
                     </tr>
                 }
             </tbody>
