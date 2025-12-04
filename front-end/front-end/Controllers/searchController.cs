@@ -31,18 +31,18 @@ namespace front_end.Controllers
             // إنشاء قائمة للنتائج مع عنوان الفندق
             var roomsWithAddress = new List<SearchViewModel.RoomWithHotelAddress>();
 
-            foreach (var room in allRooms)
-            {
-                // جلب بيانات الفندق لكل غرفة
-                var hotel = await _hotelService.GetByIdAsync(room.HotelId);
+            //foreach (var room in allRooms)
+            //{
+            //    // جلب بيانات الفندق لكل غرفة
+            //    var hotel = await _hotelService.GetByIdAsync(room.HotelId);
 
-                // إضافة الغرفة مع عنوان الفندق
-                roomsWithAddress.Add(new SearchViewModel.RoomWithHotelAddress
-                {
-                    Room = room,
-                    HotelAddress = hotel?.Address ?? string.Empty
-                });
-            }
+            //    // إضافة الغرفة مع عنوان الفندق
+            //    roomsWithAddress.Add(new SearchViewModel.RoomWithHotelAddress
+            //    {
+            //        Room = room,
+            //        HotelAddress = hotel?.Address ?? string.Empty
+            //    });
+            //}
 
             // فلترة حسب الوجهة
             if (!string.IsNullOrEmpty(destination))

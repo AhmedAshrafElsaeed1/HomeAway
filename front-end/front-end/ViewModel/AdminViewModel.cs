@@ -10,7 +10,7 @@ namespace front_end.ViewModel
         // قائمة الحجوزات
         public List<ReservationDto>? Reservations { get; set; }
 
-        // قائمة الفنادق (لو موجودة)
+        // قائمة الفنادق )
         public List<HotelDto>? Hotels { get; set; }
         public List<UserDto>? Users { get; set; }
 
