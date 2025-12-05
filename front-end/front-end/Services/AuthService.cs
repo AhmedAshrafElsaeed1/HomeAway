@@ -21,9 +21,14 @@
             _config = config;
         }
 
-        public async Task<bool> RegisterAsync(RegisterDto dto)
+        public async Task<bool> RegisterUserAsync(RegisterDto dto)
         {
-            var resp = await _client.PostAsJsonAsync("auth/register", dto);
+            var resp = await _client.PostAsJsonAsync("Users/register", dto);
+            return resp.IsSuccessStatusCode;
+        }
+        public async Task<bool> RegisterProviderAsync(RegisterDto dto)
+        {
+            var resp = await _client.PostAsJsonAsync("Providers/register", dto);
             return resp.IsSuccessStatusCode;
         }
 
