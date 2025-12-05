@@ -17,30 +17,46 @@ namespace front_end.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(new LoginViewModel());
+            try
+            {
+                return View(new LoginViewModel());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Index(LoginViewModel vm)
         {
-            if (!ModelState.IsValid)
-                return View(vm);
-
-            var loginDto = new LoginDto
+            try
             {
-                UserName = vm.UserName,
-                Password = vm.Password
-            };
+                if (!ModelState.IsValid)
+                    return View(vm);
 
-            var token = await _authService.LoginAsync(loginDto);
+                var loginDto = new LoginDto
+                {
+                    UserName = vm.UserName,
+                    Password = vm.Password
+                };
 
-            if (token == null)
-            {
-                ViewBag.Error = "Invalid username or password";
-                return View(vm);
+                var token = await _authService.LoginAsync(loginDto);
+
+                if (token == null)
+                {
+                    ViewBag.Error = "Invalid username or password";
+                    return View(vm);
+                }
+
+                return RedirectToAction("Index", "Home");
             }
-
-            return RedirectToAction("Index", "Home");
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return View("Error");
+            }
         }
     }
 }

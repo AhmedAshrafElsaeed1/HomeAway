@@ -54,38 +54,6 @@
                 </div>
             </div>
 
-            <!-- Amenities -->
-            <div class="filter-group">
-                <h4>Amenities</h4>
-
-                <div class="form-check mb-1">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="wifi"
-                           value="on"
-                           @(Model.Wifi ? "checked" : "") />
-                    <label class="form-check-label">Free WiFi</label>
-                </div>
-
-                <div class="form-check mb-1">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="pool"
-                           value="on"
-                           @(Model.Pool ? "checked" : "") />
-                    <label class="form-check-label">Swimming Pool</label>
-                </div>
-
-                <div class="form-check mb-1">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="parking"
-                           value="on"
-                           @(Model.Parking ? "checked" : "") />
-                    <label class="form-check-label">Free Parking</label>
-                </div>
-            </div>
-
             <button class="btn btn-apply" type="submit">Apply Filters</button>
 
         </form>
