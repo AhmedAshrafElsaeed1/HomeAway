@@ -20,10 +20,7 @@ namespace front_end.Controllers
             string? destination,
             decimal minPrice = 0,
             decimal maxPrice = 1000,
-            int star = 0,
-            bool wifi = false,
-            bool pool = false,
-            bool parking = false)
+            int star = 0)
         {
             // جلب كل الغرف
             var allRooms = await _roomService.GetAllAsync();
@@ -65,10 +62,6 @@ namespace front_end.Controllers
                     .ToList();
             }
 
-            // فلترة Amenities (مؤقتة، يمكن تعديلها حسب DTO حقيقي)
-            if (wifi) roomsWithAddress = roomsWithAddress.Where(r => r.Room.Type > -1).ToList();
-            if (pool) roomsWithAddress = roomsWithAddress.Where(r => r.Room.Type > -1).ToList();
-            if (parking) roomsWithAddress = roomsWithAddress.Where(r => r.Room.Type > -1).ToList();
 
             // تعبئة ViewModel
             var model = new SearchViewModel
@@ -78,9 +71,6 @@ namespace front_end.Controllers
                 MinPrice = minPrice,
                 MaxPrice = maxPrice,
                 StarRating = star,
-                Wifi = wifi,
-                Pool = pool,
-                Parking = parking
             };
 
             return View(model);

@@ -62,7 +62,11 @@
                     <tr>
                         <td>#@r.Id</td>
                         <td>@(Model.Users.FirstOrDefault(u => u.Id == r.UserId)?.FullName ?? "User Deleted")</td>
-                        <td>@(Model.Hotels.FirstOrDefault(h => h.Id == r.RoomId)?.Name)</td>
+                        @{
+                            var room = Model.Rooms?.FirstOrDefault(v => v.Id == r.RoomId);
+                            var hotel = room != null ? Model.Hotels?.FirstOrDefault(h => h.Id == room.HotelId) : null;
+                        }
+                        <td>@(hotel?.Name ?? "Unknown Hotel")</td>
                         <td>@r.From.ToString("d")</td>
                         <td>@r.To.ToString("d")</td>
                         <td>$@r.TotalPrice.ToString("0.00")</td>

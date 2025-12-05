@@ -5,30 +5,32 @@ namespace front_end.Services
 {
     public class RoomService : IRoomService
     {
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly HttpClient _httpClient;
 
-        public RoomService(IHttpClientFactory clientFactory)
+        public RoomService(IHttpClientFactory httpClientFactory)
         {
-            _clientFactory = clientFactory;
+            _httpClient = httpClientFactory.CreateClient("HomeAwayAPI");
         }
 
         public async Task<List<RoomDto>> GetAllAsync()
         {
-            var client = _clientFactory.CreateClient("HomeAwayAPI");
-            return await client.GetFromJsonAsync<List<RoomDto>>("rooms")
-                   ?? new List<RoomDto>();
+            var Rooms = await _httpClient.GetFromJsonAsync<List<RoomDto>>("Rooms");
+            return Rooms ?? new List<RoomDto>();
+        
         }
 
         public async Task<RoomDto?> GetByIdAsync(int id)
         {
-            var client = _clientFactory.CreateClient("HomeAwayAPI");
-            return await client.GetFromJsonAsync<RoomDto>($"rooms/{id}");
+            var room = await _httpClient.GetFromJsonAsync<RoomDto>($"Rooms/{id}");
+            return room;
+
         }
 
         public async Task<int?> CreateAsync(RoomDto dto)
         {
-            var client = _clientFactory.CreateClient("HomeAwayAPI");
-            var response = await client.PostAsJsonAsync("rooms", dto);
+            var response = await _httpClient.PostAsJsonAsync("Rooms", dto);
+            //var client = _clientFactory.CreateClient("HomeAwayAPI");
+            //var response = await client.PostAsJsonAsync("rooms", dto);
 
             if (!response.IsSuccessStatusCode)
                 return null;
@@ -46,15 +48,14 @@ namespace front_end.Services
 
         public async Task<bool> UpdateAsync(UpdateRoomDto dto)
         {
-            var client = _clientFactory.CreateClient("HomeAwayAPI");
-            var response = await client.PutAsJsonAsync("rooms", dto);
+            var response = await _httpClient.PutAsJsonAsync($"Rooms", dto);
+            
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var client = _clientFactory.CreateClient("HomeAwayAPI");
-            var response = await client.DeleteAsync($"rooms/{id}");
+            var response = await _httpClient.DeleteAsync($"Rooms/{id}");
             return response.IsSuccessStatusCode;
         }
     }

@@ -11,13 +11,19 @@ namespace HotelsMVC.Controllers
         private readonly IAdminService _adminService;
         private readonly IReservationService _reservationService;
         private readonly IHotelService _hotelService;
+        private readonly IRoomService _roomService;
 
-
-        public AdminController(IAdminService adminService, IReservationService reservationService, IHotelService hotelService)
+        public AdminController
+            (IAdminService adminService,
+            IReservationService reservationService
+            , IHotelService hotelService,
+            IRoomService roomService
+            )
         {
             _adminService = adminService;
             _reservationService = reservationService;
             _hotelService = hotelService;
+            _roomService = roomService;
         }
 
         public async Task<IActionResult> Dashboard()
@@ -28,6 +34,7 @@ namespace HotelsMVC.Controllers
                 var hotels = await _hotelService.GetAllAsync();
                 var users = await _adminService.GetAllUsersAsync();
                 decimal totalRevenue = await _adminService.HomeAwayProfit();
+                var Rooms = await _roomService.GetAllAsync();
 
                 var model = new AdminViewModel
                 {
@@ -35,6 +42,7 @@ namespace HotelsMVC.Controllers
                     Hotels = hotels ?? new List<HotelDto>(),
                     Users = users ?? new List<UserDto>(),
                     TotalRevenue = totalRevenue,
+                    Rooms = Rooms
 
                 };
 
@@ -54,6 +62,7 @@ namespace HotelsMVC.Controllers
                 var reservations = await _reservationService.GetAllAsync();
                 var hotels = await _hotelService.GetAllAsync();
                 var users = await _adminService.GetAllUsersAsync();
+                var Rooms = await _roomService.GetAllAsync();
                 decimal totalRevenue = await _adminService.HomeAwayProfit();
 
                 var model = new AdminViewModel
