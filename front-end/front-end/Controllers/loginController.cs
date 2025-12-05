@@ -1,35 +1,46 @@
 ﻿using front_end.Auth;
-using front_end.DTOs;
 using front_end.Interfaces;
-using front_end.Services;
+using front_end.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace front_end.Controllers
 {
-    public class loginController : Controller
+    public class LoginController : Controller
     {
-        IAuthService authService;
-        public loginController(IAuthService _authService)
+        private readonly IAuthService _authService;
+
+        public LoginController(IAuthService authService)
         {
-            authService = _authService;
+            _authService = authService;
         }
-        public IActionResult Index(LoginDto loginDto)
+
+        [HttpGet]
+        public IActionResult Index()
         {
+            return View(new LoginViewModel());
+        }
 
-            try
-            {
-                //LoginDto user = new LoginDto();
-                //user.UserName = Request.Form["UserName"];
-                //user.Password = Request.Form["Password"];
-                //var result = authService.LoginAsync(loginDto);
-                return View();
+        [HttpPost]
+        public async Task<IActionResult> Index(LoginViewModel vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
 
-            }
-            catch (Exception ex)
+            var loginDto = new LoginDto
             {
-                Console.WriteLine(ex.Message);
-                return View("Error");
+                UserName = vm.UserName,
+                Password = vm.Password
+            };
+
+            var token = await _authService.LoginAsync(loginDto);
+
+            if (token == null)
+            {
+                ViewBag.Error = "Invalid username or password";
+                return View(vm);
             }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -1,73 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using front_end.Auth;
+using front_end.Interfaces;
+using front_end.ViewModel;
+using Microsoft.AspNetCore.Mvc;
+
+
 
 namespace front_end.Controllers
 {
-    public class signupController : Controller
+    public class SignupController : Controller
     {
         public IActionResult Index()
         {
-            try
-            {
-                return View();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return View("Error");
-            }
-
+            return View(); // Views/Signup/Index.cshtml
         }
+
         public IActionResult AsCustomer()
         {
-            try
-            {
-                return View("ascustomer");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return View("Error");
-            }
-
+            return View("AsCustomer"); // Views/Signup/AsCustomer.cshtml
         }
-        public IActionResult Ashotelowner()
+
+        public IActionResult AsHotelOwner()
         {
-            try
-            {
-                return View("ashotelowner");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return View("Error");
-            }
-
+            return View("AsHotelOwner"); // Views/Signup/AsHotelOwner.cshtml
         }
-        public IActionResult registerhotel()
+
+        public IActionResult RegisterHotel()
         {
-            try
-            {
-                return View("registerhotel");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return View("Error");
-            }
-
+            return View("RegisterHotel"); // Views/Signup/RegisterHotel.cshtml
         }
+
         public IActionResult Rooms()
         {
-            try
-            {
-                return View("rooms");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return View("Error");
-            }
-
+            return View("Rooms"); // Views/Signup/Rooms.cshtml
         }
     }
 }
