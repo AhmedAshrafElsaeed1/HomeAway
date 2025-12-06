@@ -1,33 +1,53 @@
-﻿<div class="container mt-5">
+﻿@model front_end.ViewModel.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-4">
 
             <div class="card p-4 shadow">
                 <h3 class="text-center mb-4">Sign Up</h3>
 
-                <form>
-                    <div class="mb-3">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" class="form-control" placeholder="enter your name">
+                <!-- عرض رسالة خطأ عامة -->
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        Please fix the errors below and try again.
+                    </div>
+                }
+
+                <form asp-action="RegisterCustomer" method="post">
+                    <div class="mb-3 text-start">
+                        <label asp-for="FullName" class="form-label"></label>
+                        <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" placeholder="enter your email">
+                    <div class="mb-3 text-start">
+                        <label asp-for="UserName" class="form-label"></label>
+                        <input asp-for="UserName" class="form-control" placeholder="Enter your username" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" class="form-control" placeholder="enter your password">
+                    <div class="mb-3 text-start">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" placeholder="confirm password">
+                    <div class="mb-3 text-start">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
-                    <button class="btn btn-primary w-100">Confirm</button>
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
                 </form>
+
             </div>
 
         </div>

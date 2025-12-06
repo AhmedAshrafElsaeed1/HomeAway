@@ -1,23 +1,35 @@
-﻿@{
-    ViewData["Title"] = "login";
+﻿@model front_end.ViewModel.LogInViewModel
+
+@{
+    ViewData["Title"] = "Login";
     Layout = "_Layout";
 }
+
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 15px;">
 
         <h3 class="text-center mb-2">Welcome to HomeAway</h3>
         <p class="text-center text-muted mb-4">Please log in or sign up to continue</p>
 
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        }
+
         <form asp-action="Index" asp-controller="Login" method="post">
 
             <div class="mb-3">
-                <label class="form-label">Email Address</label>
-                <input type="email" name="UserName" class="form-control" placeholder="Enter your email" required>
+                <label asp-for="UserName" class="form-label"></label>
+                <input asp-for="UserName" class="form-control" placeholder="Enter your username" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" name="Password" class="form-control" placeholder="Enter your password" required>
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="form-check mb-3">
@@ -30,12 +42,6 @@
             <a asp-controller="Signup" asp-action="Index" class="btn btn-outline-primary w-100">
                 Sign Up
             </a>
-
-            <!--
-            <div class="text-center mt-3">
-                <a href="#">Forgot your password?</a>
-            </div>
-            -->
 
         </form>
     </div>
