@@ -14,12 +14,16 @@
         private readonly IConfiguration _config;
         private const string CookieName = "HomeAwayJwt";
 
-        public AuthService(HttpClient client, IHttpContextAccessor httpContextAccessor, IConfiguration config)
+        public AuthService(
+    IHttpClientFactory clientFactory,
+    IHttpContextAccessor httpContextAccessor,
+    IConfiguration config)
         {
-            _client = client;
+            _client = clientFactory.CreateClient("HomeAwayAPI");
             _httpContextAccessor = httpContextAccessor;
             _config = config;
         }
+
 
         public async Task<bool> RegisterUserAsync(RegisterDto dto)
         {

@@ -1,37 +1,95 @@
-﻿using front_end.Auth;
-using front_end.Interfaces;
-using front_end.ViewModel;
+﻿using front_end.Auth;       // عشان RegisterDto
+using front_end.Interfaces; // عشان IAuthService
+using front_end.ViewModel;  // عشان RegisterViewModel
 using Microsoft.AspNetCore.Mvc;
-
-
 
 namespace front_end.Controllers
 {
     public class SignupController : Controller
     {
+        private readonly IAuthService _authService;
+
+        public SignupController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+        [HttpGet]
         public IActionResult Index()
         {
-            return View(); // Views/Signup/Index.cshtml
+            return View();
         }
-
+        // GET: عرض صفحة التسجيل للعميل
+        [HttpGet]
         public IActionResult AsCustomer()
         {
-            return View("AsCustomer"); // Views/Signup/AsCustomer.cshtml
+            return View(new RegisterViewModel());
         }
 
+        // POST: معالجة تسجيل العميل
+        [HttpPost]
+        public async Task<IActionResult> RegisterCustomer(RegisterViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                // لو الـ Validation فشل، نرجع نفس الصفحة مع البيانات المدخلة
+                return View("AsCustomer", vm);
+            }
+
+            // تحويل البيانات من ViewModel لـ DTO
+            var dto = new RegisterDto
+            {
+                FullName = vm.FullName,
+                UserName = vm.UserName,
+                Email = vm.Email,
+                Password = vm.Password
+            };
+
+            // استدعاء خدمة المصادقة
+            var success = await _authService.RegisterUserAsync(dto);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", "Registration failed. Please try again.");
+                return View("AsCustomer", vm);
+            }
+
+            // إذا نجحت العملية، نروح لصفحة تسجيل الدخول
+            return RedirectToAction("Index", "Login");
+        }
+
+        // GET: صفحة التسجيل لمالك الفندق
+        [HttpGet]
         public IActionResult AsHotelOwner()
         {
-            return View("AsHotelOwner"); // Views/Signup/AsHotelOwner.cshtml
+            return View(new RegisterViewModel());
         }
 
-        public IActionResult RegisterHotel()
+        // POST: معالجة تسجيل مالك الفندق
+        [HttpPost]
+        public async Task<IActionResult> RegisterHotelOwner(RegisterViewModel vm)
         {
-            return View("RegisterHotel"); // Views/Signup/RegisterHotel.cshtml
-        }
+            if (!ModelState.IsValid)
+            {
+                return View("AsHotelOwner", vm);
+            }
 
-        public IActionResult Rooms()
-        {
-            return View("Rooms"); // Views/Signup/Rooms.cshtml
+            var dto = new RegisterDto
+            {
+                FullName = vm.FullName,
+                UserName = vm.UserName,
+                Email = vm.Email,
+                Password = vm.Password
+            };
+
+            var success = await _authService.RegisterProviderAsync(dto);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", "Registration failed. Please try again.");
+                return View("AsHotelOwner", vm);
+            }
+
+            return RedirectToAction("Index", "Signup");
         }
     }
 }
