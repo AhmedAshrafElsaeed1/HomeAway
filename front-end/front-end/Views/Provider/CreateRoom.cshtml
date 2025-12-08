@@ -1,0 +1,47 @@
+﻿@model front_end.DTOs.RoomDto
+@{
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
+    ViewData["Title"] = "Add Room";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4>Create New Room</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="CreateRoom">
+                    <div class="mb-3">
+                        <label class="form-label">Room Number / Name</label>
+                        <input asp-for="Number" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Price per Night</label>
+                        <input asp-for="Price" type="number" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Room Type</label>
+                        <select asp-for="Type" class="form-select">
+                            <option value="0">Single</option>
+                            <option value="1">Double</option>
+                            <option value="2">Triple</option>
+                            <option value="3">Quadruple</option>
+                            <option value="4">Penthouse</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        <input asp-for="Quantity" type="number" value="1" class="form-control" />
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Save Room</button>
+                    <a asp-action="Rooms" class="btn btn-secondary w-100 mt-2">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
