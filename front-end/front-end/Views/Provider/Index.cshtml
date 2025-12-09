@@ -1,0 +1,88 @@
+﻿@model front_end.ViewModel.ProviderDashboardViewModel
+@{
+    Layout = "~/Views/Shared/_ProviderLayout.cshtml";
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+    <h2 class="mb-4">Provider Dashboard - @Model.HotelInfo?.Name</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Rooms</h5>
+                    <p class="card-text display-4">@Model.Rooms.Count</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Revenue</h5>
+                    <p class="card-text display-4">$@Model.TotalRevenue</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Active Reservations</h5>
+                    <p class="card-text display-4">@Model.Reservations.Count(r => r.Status == 1)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Recent Reservations
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Room ID</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var res in Model.Reservations.OrderByDescending(r => r.From).Take(10))
+                    {
+                        <tr>
+                            <td>@res.Id</td>
+                            <td>@res.RoomId</td>
+                            <td>@res.From.ToShortDateString()</td>
+                            <td>@res.To.ToShortDateString()</td>
+                            <td>@res.TotalPrice.ToString("C")</td>
+                            <td>
+                                @switch (res.Status)
+                                {
+                                    case 0:
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                        break;
+                                    case 1:
+                                        <span class="badge bg-success">Confirmed</span>
+                                        break;
+                                    case 2:
+                                        <span class="badge bg-danger">Canceled</span>
+                                        break;
+                                    case 3:
+                                        <span class="badge bg-info text-dark">Completed</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">Unknown</span>
+                                        break;
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
