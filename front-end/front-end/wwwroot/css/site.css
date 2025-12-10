@@ -303,59 +303,60 @@ body {
 
 .hotel-result-card {
     display: flex;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    margin-top: 15px;
-    padding: 15px;
-    gap: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+   
+    margin-bottom: 15px; /* مسافة بين كل كارد والتاني */
+    padding: 0;
+    overflow: hidden; /* عشان الصورة تبقى مرتبّة مع الحواف */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #fff;
+    height: 140px; /* ارتفاع ثابت للكارد */
 }
 
     .hotel-result-card img {
         width: 150px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 4px;
+        height: 100%;
+        object-fit: cover; /* الصورة تملى الكارد */
+        border-right: 1px solid #ddd;
     }
 
     .hotel-result-card .info {
-        flex-grow: 1;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* العناصر في منتصف الكارد عموديًا */
+        padding: 10px;
+        gap: 2px;
+        
     }
 
     .hotel-result-card h3 {
-        margin-bottom: 5px;
-        font-size: 18px;
+        margin: 0px;
+        font-size: 16px;
     }
 
-    .hotel-result-card .amenities-list span {
-        background-color: #eee;
-        padding: 2px 8px;
-        border-radius: 3px;
-        font-size: 12px;
-        margin-right: 5px;
+    .hotel-result-card p,
+    .hotel-result-card .rating {
+        margin: 0;
+        font-size: 14px;
+        color: #555;
     }
 
 .price-action {
-    text-align: right;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
+    padding: 10px;
 }
 
-    .price-action .price {
-        font-size: 22px;
-        font-weight: bold;
-        color: var(--primary-color);
-        margin-bottom: 10px;
+    .price-action .btn-select {
+        padding: 6px 12px;
+        font-size: 14px;
     }
 
-        .price-action .price span {
-            display: block;
-            font-size: 12px;
-            font-weight: normal;
-            color: #666;
-        }
+
 
 /* --- 3. Hotel Details / Reserve Page (Not directly in current images, but keeping structure) --- */
 .hotel-gallery {

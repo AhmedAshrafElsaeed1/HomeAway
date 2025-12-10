@@ -7,7 +7,7 @@ namespace front_end.Controllers
     public class SearchController : Controller
     {
         private readonly IRoomService _roomService;
-        private readonly IHotelService _hotelService; // خدمة لجلب بيانات الفندق
+        private readonly IHotelService _hotelService;
 
         public SearchController(IRoomService roomService, IHotelService hotelService)
         {
@@ -20,28 +20,32 @@ namespace front_end.Controllers
             string? destination,
             decimal minPrice = 0,
             decimal maxPrice = 1000,
-            int star = 0)
+            int star = 0) // star هنا ممكن تمثل تصنيف أو نوع الغرفة
         {
-            // جلب كل الغرف
+            // 1️⃣ جلب كل الغرف
             var allRooms = await _roomService.GetAllAsync();
 
-            // إنشاء قائمة للنتائج مع عنوان الفندق
+            // 2️⃣ ربط كل غرفة بعنوان الفندق
             var roomsWithAddress = new List<SearchViewModel.RoomWithHotelAddress>();
 
-            //foreach (var room in allRooms)
-            //{
-            //    // جلب بيانات الفندق لكل غرفة
-            //    var hotel = await _hotelService.GetByIdAsync(room.HotelId);
+            foreach (var room in allRooms)
+            {
+                string hotelAddress = string.Empty;
 
-            //    // إضافة الغرفة مع عنوان الفندق
-            //    roomsWithAddress.Add(new SearchViewModel.RoomWithHotelAddress
-            //    {
-            //        Room = room,
-            //        HotelAddress = hotel?.Address ?? string.Empty
-            //    });
-            //}
+                if (room.HotelId.HasValue)
+                {
+                    var hotel = await _hotelService.GetByIdAsync(room.HotelId.Value);
+                    hotelAddress = hotel?.Address ?? string.Empty;
+                }
 
-            // فلترة حسب الوجهة
+                roomsWithAddress.Add(new SearchViewModel.RoomWithHotelAddress
+                {
+                    Room = room,
+                    HotelAddress = hotelAddress
+                });
+            }
+
+            // 3️⃣ فلترة حسب الوجهة
             if (!string.IsNullOrEmpty(destination))
             {
                 roomsWithAddress = roomsWithAddress
@@ -49,12 +53,12 @@ namespace front_end.Controllers
                     .ToList();
             }
 
-            // فلترة حسب السعر
+            // 4️⃣ فلترة حسب السعر
             roomsWithAddress = roomsWithAddress
                 .Where(r => r.Room.Price >= minPrice && r.Room.Price <= maxPrice)
                 .ToList();
 
-            // فلترة حسب ستار ريتنج
+            // 5️⃣ فلترة حسب ستار ريتنج / نوع الغرفة
             if (star > 0)
             {
                 roomsWithAddress = roomsWithAddress
@@ -62,15 +66,14 @@ namespace front_end.Controllers
                     .ToList();
             }
 
-
-            // تعبئة ViewModel
+            // 6️⃣ تعبئة الـ ViewModel
             var model = new SearchViewModel
             {
                 Results = roomsWithAddress,
                 Destination = destination,
                 MinPrice = minPrice,
                 MaxPrice = maxPrice,
-                StarRating = star,
+                StarRating = star
             };
 
             return View(model);
