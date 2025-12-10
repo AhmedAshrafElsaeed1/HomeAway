@@ -4,45 +4,44 @@
     Layout = "_Layout";
 }
 
-<div class="profile-layout">
-
-    <aside class="profile-sidebar">
-        <div class="user-info">
-            <div class="user-avatar">
-                @if (!string.IsNullOrEmpty(Model.CurrentUser?.FullName))
-                {
-                    @Model.CurrentUser.FullName.Substring(0,1).ToUpper()
-                }
+<div class="container mt-4 profile-layout row">
+    <!-- Sidebar -->
+    <aside class="col-md-3 profile-sidebar mb-4">
+        <div class="card p-3 text-center">
+            <div class="user-avatar rounded-circle bg-primary text-white mx-auto mb-2"
+                 style="width:60px; height:60px; display:flex; align-items:center; justify-content:center; font-size:24px;">
+                @(string.IsNullOrEmpty(Model.CurrentUser?.FullName)
+                                ? "G"
+                                : Model.CurrentUser.FullName.Substring(0, 1).ToUpper())
             </div>
-           <h3>@(Model.CurrentUser?.FullName ?? "Guest")</h3>
-<p>@(Model.CurrentUser?.Email ?? "Not provided")</p>
-
+            <h5>@(Model.CurrentUser?.FullName ?? "Guest")</h5>
+            <p class="text-muted mb-2">@(!string.IsNullOrEmpty(Model.CurrentUser?.Email) ? Model.CurrentUser.Email : "Not provided")</p>
         </div>
 
-        <nav class="profile-nav">
-            <a class="active">My Bookings</a>
-            <a href="#">Profile</a>
-            <a href="#">Wishlist</a>
-            <a href="#">Settings</a>
-            <a class="logout" href="/Login/Logout">Logout</a>
+        <nav class="nav flex-column mt-3">
+            <a class="nav-link active" href="#">My Bookings</a>
+            <a class="nav-link" href="#">Profile</a>
+            <a class="nav-link" href="#">Wishlist</a>
+            <a class="nav-link" href="#">Settings</a>
+            <a class="nav-link text-danger" href="/Login/Logout">Logout</a>
         </nav>
     </aside>
 
-    <div class="profile-content">
-        <h2>My Bookings</h2>
+    <!-- Main Content -->
+    <div class="col-md-9 profile-content">
+        <h3 class="mb-3">My Bookings</h3>
 
         @if (Model.Bookings != null && Model.Bookings.Any())
         {
             @foreach (var booking in Model.Bookings)
             {
-                <div class="booking-item">
-                    <div class="booking-details">
-                        <h4>@booking.RoomId</h4>
-                        <p>@booking.From.ToShortDateString() - @booking.To.ToShortDateString()</p>
-                        
+                <div class="card mb-2 p-2 d-flex justify-content-between align-items-center flex-md-row flex-column">
+                    <div>
+                        <h5>Room #@booking.RoomId</h5>
+                        <p class="mb-0">@booking.From.ToShortDateString() - @booking.To.ToShortDateString()</p>
                     </div>
-                    <div class="booking-status">
-                        <span class="status @(booking.Status == 1 ? "completed" : "confirmed")">
+                    <div>
+                        <span class="badge @(booking.Status == 1 ? "bg-success" : "bg-primary")">
                             @(booking.Status == 1 ? "Completed" : "Confirmed")
                         </span>
                     </div>
@@ -54,18 +53,24 @@
             <p>No bookings found.</p>
         }
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="number">@Model.TotalBookings</span>
-                <p>Total Bookings</p>
+        <div class="row mt-4 g-3">
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>@Model.TotalBookings</h4>
+                    <p>Total Bookings</p>
+                </div>
             </div>
-            <div class="stat-card">
-                <span class="number">@Model.Completed</span>
-                <p>Completed Stays</p>
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>@Model.Completed</h4>
+                    <p>Completed Stays</p>
+                </div>
             </div>
-            <div class="stat-card">
-                <span class="number">@Model.Upcoming</span>
-                <p>Upcoming Trips</p>
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>@Model.Upcoming</h4>
+                    <p>Upcoming Trips</p>
+                </div>
             </div>
         </div>
     </div>

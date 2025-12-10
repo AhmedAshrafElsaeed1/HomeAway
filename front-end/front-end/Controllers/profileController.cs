@@ -1,67 +1,52 @@
-﻿using front_end.DTOs;
-using front_end.Interfaces;
+﻿using front_end.Interfaces;
 using front_end.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace front_end.Controllers
 {
     public class ProfileController : Controller
     {
-        private readonly HttpClient _client;
         private readonly IAuthService _authService;
+        private readonly IReservationService _reservationService;
 
-        public ProfileController(IAuthService authService, IHttpClientFactory clientFactory)
+        public ProfileController(IAuthService authService, IReservationService reservationService)
         {
             _authService = authService;
-            _client = clientFactory.CreateClient("HomeAwayAPI");
+            _reservationService = reservationService;
         }
 
         public async Task<IActionResult> Index()
         {
-            UserDto? user = null;
-            List<ReservationDto> bookings = new List<ReservationDto>();
-
-            try
+            // جلب بيانات المستخدم من التوكن
+            var currentUser = _authService.GetCurrentUser();
+            if (currentUser == null)
             {
-                // 1️⃣ جلب الـ JWT من الكوكي
-                var token = HttpContext.Request.Cookies["HomeAwayJwt"];
-                if (!string.IsNullOrEmpty(token))
-                {
-                    _client.DefaultRequestHeaders.Authorization =
-                        new AuthenticationHeaderValue("Bearer", token);
-
-                    // 2️⃣ جلب بيانات المستخدم
-                    var userResponse = await _client.GetAsync("Users/me");
-                    if (userResponse.IsSuccessStatusCode)
-                    {
-                        user = await userResponse.Content.ReadFromJsonAsync<UserDto>();
-                    }
-
-                    // 3️⃣ جلب الحجوزات الخاصة بالمستخدم
-                    if (user != null)
-                    {
-                        var bookingResponse = await _client.GetAsync($"Reservations/user/{user.Id}");
-                        if (bookingResponse.IsSuccessStatusCode)
-                        {
-                            bookings = await bookingResponse.Content.ReadFromJsonAsync<List<ReservationDto>>()
-                                       ?? new List<ReservationDto>();
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                // أي خطأ هيتجاهل
+                // لو مش مسجل دخول
+                return RedirectToAction("Index", "Login");
             }
 
+            // جلب كل الحجوزات
+            var allBookings = await _reservationService.GetAllAsync();
+
+            // فلترة الحجوزات للمستخدم الحالي
+            var userBookings = allBookings?
+                .Where(b => b.UserId == currentUser.Id)
+                .OrderByDescending(b => b.From)
+                .ToList();
+
+            // احصائيات
+            int total = userBookings?.Count ?? 0;
+            int completed = userBookings?.Count(b => b.Status == 1) ?? 0;
+            int upcoming = userBookings?.Count(b => b.Status != 1) ?? 0;
+
+            // تجهيز ViewModel
             var vm = new ProfileViewModel
             {
-                CurrentUser = user,
-                
-                IsSignedIn = user != null,
-                Bookings = bookings
+                CurrentUser = currentUser,
+                Bookings = userBookings,
+                TotalBookings = total,
+                Completed = completed,
+                Upcoming = upcoming
             };
 
             return View(vm);
