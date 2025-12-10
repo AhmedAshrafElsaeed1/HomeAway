@@ -33,7 +33,7 @@ body {
     z-index: 1000;
 }
 
-    .navbar .logo {
+    .navbar-brand {
         font-size: 24px;
         font-weight: bold;
         color: var(--primary-color);

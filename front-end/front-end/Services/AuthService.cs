@@ -90,7 +90,7 @@
             var ctx = _httpContextAccessor.HttpContext;
 
             if (ctx == null ||
-                !ctx.Request.Cookies.TryGetValue(CookieName, out var token))
+                !ctx.Request.Cookies.TryGetValue("HomeAwayJwt", out var token))
                 return null;
 
             var payload = JwtHelper.DecodePayload(token);
@@ -100,13 +100,15 @@
             return new UserDto
             {
                 Id = payload.TryGetValue("sub", out var id) ? id?.ToString() : "",
-                FullName = payload.TryGetValue("name", out var name) ? name?.ToString() : "",
-                Email = payload.TryGetValue("email", out var email) ? email?.ToString() : "",
-                Role = payload.TryGetValue("role", out var role)
+                FullName = payload.TryGetValue("fullName", out var fullName) ? fullName?.ToString() : "",
+                UserName = payload.TryGetValue("unique_name", out var userName) ? userName?.ToString() : "",
+                Email = payload.TryGetValue("email", out var email) ? email?.ToString() : "", // غالباً هتبقى فاضية
+                Role = payload.TryGetValue("http://schemas.microsoft.com/ws/2008/06/identity/claims/role", out var role)
                         ? new List<string> { role?.ToString() ?? "" }
                         : new List<string>()
             };
         }
+
 
         // ------------------ STORE TOKEN IN COOKIE ------------------
         private void StoreToken(string token)
