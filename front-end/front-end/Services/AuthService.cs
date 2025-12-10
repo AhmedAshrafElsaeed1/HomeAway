@@ -42,19 +42,23 @@
             var resp = await _client.PostAsJsonAsync("auth/login", dto);
             if (!resp.IsSuccessStatusCode) return null;
 
-            // assume API returns { token: "..." }
             var obj = await resp.Content.ReadFromJsonAsync<JsonElement>();
-            if (obj.TryGetProperty("token", out var tokenProp))
+            if (obj.TryGetProperty("token", out var tokenObj))
             {
-                var token = tokenProp.GetString();
-                if (!string.IsNullOrWhiteSpace(token))
+                if (tokenObj.TryGetProperty("result", out var tokenProp))
                 {
-                    StoreToken(token);
-                    return token;
+                    var token = tokenProp.GetString();
+                    if (!string.IsNullOrWhiteSpace(token))
+                    {
+                        StoreToken(token);
+                        return token;
+                    }
                 }
             }
+
             return null;
         }
+
         public Task LogoutAsync()
         {
             var ctx = _httpContextAccessor.HttpContext;
@@ -88,7 +92,7 @@
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,       // true in production (HTTPS)
+                Secure = false,       // true in production (HTTPS)
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTimeOffset.UtcNow.AddHours(12)
             };

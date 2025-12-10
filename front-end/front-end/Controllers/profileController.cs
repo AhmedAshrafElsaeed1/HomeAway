@@ -1,10 +1,9 @@
 ﻿using front_end.DTOs;
 using front_end.Interfaces;
-using front_end.Services;
 using front_end.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
-using System.Text.Json;
+using System.Net.Http.Json;
 
 namespace front_end.Controllers
 {
@@ -13,37 +12,42 @@ namespace front_end.Controllers
         private readonly HttpClient _client;
         private readonly IAuthService _authService;
 
-        public ProfileController(IAuthService authService)
+        public ProfileController(IAuthService authService, IHttpClientFactory clientFactory)
         {
             _authService = authService;
+            _client = clientFactory.CreateClient("HomeAwayAPI");
         }
-
 
         public async Task<IActionResult> Index()
         {
-            var isSignedIn = await _authService.IsSignedInAsync();
-            if (!isSignedIn)
+            UserDto? user = null;
+
+            try
             {
-                // لو مش مسجل دخول، نودي على صفحة تسجيل الدخول
-                return RedirectToAction("Index", "Login");
+                // جلب الـ JWT من الكوكي (لو موجود)
+                var token = HttpContext.Request.Cookies["HomeAwayJwt"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    _client.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", token);
+
+                    var response = await _client.GetAsync("Users/me");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        user = await response.Content.ReadFromJsonAsync<UserDto>();
+                    }
+                }
+            }
+            catch
+            {
+                // أي خطأ هنا هيتجاهل ويعرض الصفحة فاضية
             }
 
-            // لو مسجل دخول، نجيب بيانات المستخدم من API
-            var ctx = HttpContext;
-            var token = ctx.Request.Cookies["HomeAwayJwt"];
-            if (token == null) return RedirectToAction("Index", "Login");
-
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var resp = await _client.GetAsync("Users/me"); // endpoint يرجع بيانات المستخدم الحالي
-
-            if (!resp.IsSuccessStatusCode) return RedirectToAction("Index", "Login");
-
-            var user = await resp.Content.ReadFromJsonAsync<UserDto>();
-
+            // إنشاء ViewModel وإرسالها للـ View
             var vm = new ProfileViewModel
             {
                 CurrentUser = user,
-                IsSignedIn = true
+                IsSignedIn = user != null
             };
 
             return View(vm);
