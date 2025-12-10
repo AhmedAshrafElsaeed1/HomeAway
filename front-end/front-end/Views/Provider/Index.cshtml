@@ -7,85 +7,72 @@
 <div class="d-flex">
 
     <!-- Sidebar -->
-       <div class="col-md-3 col-lg-2 bg-dark text-white min-vh-100 p-3">
+    <div class="bg-dark text-white vh-100 p-3" style="width: 250px;">
+        <h3 class="text-center mb-4">Hotel Owner</h3>
 
-            <h3 class="text-center mb-4">Hotel Owner</h3>
-
-            <ul class="nav flex-column">
-
-                <li class="nav-item mb-2">
-                    <a href="/Provider/Index" class="nav-link text-white">
-                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="/Provider/Rooms" class="nav-link text-white fw-bold">
-                        <i class="fas fa-bed me-2"></i> Manage Rooms
-                    </a>
-                </li>
-
-                <li class="nav-item mb-2">
-                    <a href="/Home/Index" class="nav-link text-white">
-                        <i class="fas fa-home me-2"></i> Back to Home
-                    </a>
-                </li>
-
-                <li class="nav-item mt-4">
-                    <a href="/Auth/Logout" class="nav-link text-danger fw-bold">
-                        <i class="fas fa-sign-out-alt me-2"></i> Logout
-                    </a>
-                </li>
-
-            </ul>
-
-        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="/Provider/Index" class="nav-link text-white">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/Provider/Rooms" class="nav-link text-white fw-bold">
+                    <i class="fas fa-bed me-2"></i> Manage Rooms
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="/Home/Index" class="nav-link text-white">
+                    <i class="fas fa-home me-2"></i> Back to Home
+                </a>
+            </li>
+            <li class="nav-item mt-4">
+                <a href="/Auth/Logout" class="nav-link text-danger fw-bold">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <!-- Main Content -->
-    <div class="container-fluid" style="margin-left: 20px;">
-        
-        <h2 class="mt-4 mb-4">Provider Dashboard - @Model.HotelInfo?.Name</h2>
+    <div class="flex-grow-1 p-4" style="background-color: #f8f9fa;">
+        <h2 class="mb-4">Provider Dashboard - @Model.HotelInfo?.Name</h2>
 
         <!-- Stats Cards -->
         <div class="row mb-4">
-
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 text-white bg-primary mb-3">
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-primary shadow-sm border-0">
                     <div class="card-body text-center">
                         <h5 class="card-title">Total Rooms</h5>
-                        <p class="display-4 fw-bold">@Model.Rooms.Count</p>
+                        <p class="display-4 fw-bold">@Model.Rooms?.Count ?? 0</p>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 text-white bg-success mb-3">
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-success shadow-sm border-0">
                     <div class="card-body text-center">
                         <h5 class="card-title">Total Revenue</h5>
                         <p class="display-4 fw-bold">$@Model.TotalRevenue</p>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 text-white bg-warning mb-3">
+            <div class="col-md-4 mb-3">
+                <div class="card text-white bg-warning shadow-sm border-0">
                     <div class="card-body text-center">
                         <h5 class="card-title">Active Reservations</h5>
-                        <p class="display-4 fw-bold">@Model.Reservations.Count(r => r.Status == 1)</p>
+                        <p class="display-4 fw-bold">@Model.Reservations?.Count(r => r.Status == 1) ?? 0</p>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <!-- Recent Reservations -->
-        <div class="card shadow-sm mb-5">
+        <div class="card shadow-sm">
             <div class="card-header bg-light fw-bold">
                 Recent Reservations
             </div>
-            <div class="card-body">
-
-                <table class="table table-striped table-hover">
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover mb-0">
                     <thead class="table-dark">
                         <tr>
                             <th>ID</th>
@@ -96,9 +83,8 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        @foreach (var res in Model.Reservations.OrderByDescending(r => r.From).Take(10))
+                        @foreach (var res in Model.Reservations?.OrderByDescending(r => r.From).Take(10) ?? Enumerable.Empty<front_end.DTOs.ReservationDto>())
                         {
                             <tr>
                                 <td>@res.Id</td>
@@ -112,19 +98,15 @@
                                         case 0:
                                             <span class="badge bg-warning text-dark">Pending</span>
                                             break;
-
                                         case 1:
                                             <span class="badge bg-success">Confirmed</span>
                                             break;
-
                                         case 2:
                                             <span class="badge bg-danger">Canceled</span>
                                             break;
-
                                         case 3:
                                             <span class="badge bg-info text-dark">Completed</span>
                                             break;
-
                                         default:
                                             <span class="badge bg-secondary">Unknown</span>
                                             break;
@@ -133,12 +115,8 @@
                             </tr>
                         }
                     </tbody>
-
                 </table>
-
             </div>
         </div>
-
     </div>
-
 </div>
