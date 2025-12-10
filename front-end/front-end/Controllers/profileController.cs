@@ -21,33 +21,47 @@ namespace front_end.Controllers
         public async Task<IActionResult> Index()
         {
             UserDto? user = null;
+            List<ReservationDto> bookings = new List<ReservationDto>();
 
             try
             {
-                // جلب الـ JWT من الكوكي (لو موجود)
+                // 1️⃣ جلب الـ JWT من الكوكي
                 var token = HttpContext.Request.Cookies["HomeAwayJwt"];
                 if (!string.IsNullOrEmpty(token))
                 {
                     _client.DefaultRequestHeaders.Authorization =
                         new AuthenticationHeaderValue("Bearer", token);
 
-                    var response = await _client.GetAsync("Users/me");
-                    if (response.IsSuccessStatusCode)
+                    // 2️⃣ جلب بيانات المستخدم
+                    var userResponse = await _client.GetAsync("Users/me");
+                    if (userResponse.IsSuccessStatusCode)
                     {
-                        user = await response.Content.ReadFromJsonAsync<UserDto>();
+                        user = await userResponse.Content.ReadFromJsonAsync<UserDto>();
+                    }
+
+                    // 3️⃣ جلب الحجوزات الخاصة بالمستخدم
+                    if (user != null)
+                    {
+                        var bookingResponse = await _client.GetAsync($"Reservations/user/{user.Id}");
+                        if (bookingResponse.IsSuccessStatusCode)
+                        {
+                            bookings = await bookingResponse.Content.ReadFromJsonAsync<List<ReservationDto>>()
+                                       ?? new List<ReservationDto>();
+                        }
                     }
                 }
             }
             catch
             {
-                // أي خطأ هنا هيتجاهل ويعرض الصفحة فاضية
+                // أي خطأ هيتجاهل
             }
 
-            // إنشاء ViewModel وإرسالها للـ View
             var vm = new ProfileViewModel
             {
                 CurrentUser = user,
-                IsSignedIn = user != null
+                
+                IsSignedIn = user != null,
+                Bookings = bookings
             };
 
             return View(vm);
