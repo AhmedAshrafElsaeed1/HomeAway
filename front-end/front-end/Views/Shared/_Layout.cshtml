@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@inject front_end.Interfaces.IAuthService AuthService
+@{
+    var currentUser = AuthService.GetCurrentUser();
+    var roles = currentUser?.Role ?? new List<string>();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,63 +14,57 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+
     <header>
-        <nav class="navbar">
-            <div class="logo">HomeAway</div>
-            <ul class="navbar-links">
-                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-controller="Search" asp-action="Index">Search</a></li>
-                <li><a asp-controller="Reserve" asp-action="Index">Reserve</a></li>
-                <li><a asp-controller="Profile" asp-action="Index">Profile</a></li>
-                <li><a asp-controller="Admin" asp-action="Dashboard">Admin</a></li>
-                <li>
-                <a asp-controller="Login" asp-action="Index" class="btn-login">Login</a></li>
-                
-            </ul>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 fixed-top">
+
+            <a class="navbar-brand fs-3 fw-bold" asp-controller="Home" asp-action="Index">HomeAway</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Search" asp-action="Index">Search</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Reserve" asp-action="Index">Reserve</a></li>
+
+                    @if (currentUser != null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Profile" asp-action="Index">Profile</a>
+                        </li>
+
+                        @if (roles.Contains("Admin"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Dashboard">Admin</a></li>
+                        }
+                        else if (roles.Contains("Provider"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Provider" asp-action="Index">Provider</a></li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-primary text-white px-3 py-1" asp-controller="Login" asp-action="Index">Login</a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
         </nav>
-
-
     </header>
 
-    <main>
-        @RenderBody()
+
+    <main class="mt-1 pt-1">
+        @RenderBody()   
     </main>
 
-    <!-- المودال -->
-    <div id="auth-modal" class="modal">
-        <div class="form-container modal-content">
-            <span class="close-btn">&times;</span>
 
-            <div class="form-header">
-                <h2>Welcome to HomeAway</h2>
-                <p>Please login or sign up to continue</p>
-                <div class="tab-switch">
-                    <a href="#" class="active" data-tab="login-form">Login</a>
-                    <a href="#" data-tab="signup-form">Sign Up</a>
-                </div>
-            </div>
+    @RenderSection("Scripts", required: false)
 
-            <form id="login-form" class="active">
-                <input type="email" placeholder="Email Address" required>
-                <input type="password" placeholder="Password" required>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="remember-me">
-                    <label for="remember-me">Remember me</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-                <a href="#" class="forgot-password">Forgot your password?</a>
-            </form>
-
-            <form id="signup-form">
-                <input type="text" placeholder="Full Name" required>
-                <input type="email" placeholder="Email Address" required>
-                <input type="password" placeholder="Password" required>
-                <input type="password" placeholder="Confirm Password" required>
-                <button type="submit" class="btn btn-primary">Sign Up</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="~/js/site.js"></script>
 </body>
 </html>

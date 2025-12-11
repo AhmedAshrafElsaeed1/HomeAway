@@ -1,28 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace front_end.DTOs
 {
     public class RoomDto
     {
         public int Id { get; set; }
-        //public string HotelName { get; set; }
+
+        // عدد الغرف المتاحة
         public int Quantity { get; set; }
 
+        // نوع الغرفة
+        // 0 = Single
+        // 1 = Double
+        // 2 = Triple
+        // 3 = Quadruple
+        // 4 = Penthouse
         public int Type { get; set; }
-        // 0 = single
-        // 1 = double
-        // 2 = triple
-        // 3 = quadruple
-        // 4 = penthouse
 
+        // هل الغرفة متاحة للحجز
         public bool IsAvailable { get; set; }
+
+        // رقم الفندق المرتبطة به الغرفة
         public int? HotelId { get; set; }
 
+        // رقم الغرفة
         public string? Number { get; set; }
+
+        // سعر الغرفة
         public decimal Price { get; set; }
     }
 }

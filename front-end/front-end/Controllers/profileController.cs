@@ -1,49 +1,52 @@
-﻿using front_end.DTOs;
-using front_end.Interfaces;
-using front_end.Services;
+﻿using front_end.Interfaces;
 using front_end.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
-using System.Text.Json;
 
 namespace front_end.Controllers
 {
     public class ProfileController : Controller
     {
-        private readonly HttpClient _client;
         private readonly IAuthService _authService;
+        private readonly IReservationService _reservationService;
 
-        public ProfileController(IAuthService authService)
+        public ProfileController(IAuthService authService, IReservationService reservationService)
         {
             _authService = authService;
+            _reservationService = reservationService;
         }
-
 
         public async Task<IActionResult> Index()
         {
-            var isSignedIn = await _authService.IsSignedInAsync();
-            if (!isSignedIn)
+            // جلب بيانات المستخدم من التوكن
+            var currentUser = _authService.GetCurrentUser();
+            if (currentUser == null)
             {
-                // لو مش مسجل دخول، نودي على صفحة تسجيل الدخول
+                // لو مش مسجل دخول
                 return RedirectToAction("Index", "Login");
             }
 
-            // لو مسجل دخول، نجيب بيانات المستخدم من API
-            var ctx = HttpContext;
-            var token = ctx.Request.Cookies["HomeAwayJwt"];
-            if (token == null) return RedirectToAction("Index", "Login");
+            // جلب كل الحجوزات
+            var allBookings = await _reservationService.GetAllAsync();
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var resp = await _client.GetAsync("Users/me"); // endpoint يرجع بيانات المستخدم الحالي
+            // فلترة الحجوزات للمستخدم الحالي
+            var userBookings = allBookings?
+                .Where(b => b.UserId == currentUser.Id)
+                .OrderByDescending(b => b.From)
+                .ToList();
 
-            if (!resp.IsSuccessStatusCode) return RedirectToAction("Index", "Login");
+            // احصائيات
+            int total = userBookings?.Count ?? 0;
+            int completed = userBookings?.Count(b => b.Status == 1) ?? 0;
+            int upcoming = userBookings?.Count(b => b.Status != 1) ?? 0;
 
-            var user = await resp.Content.ReadFromJsonAsync<UserDto>();
-
+            // تجهيز ViewModel
             var vm = new ProfileViewModel
             {
-                CurrentUser = user,
-                IsSignedIn = true
+                CurrentUser = currentUser,
+                Bookings = userBookings,
+                TotalBookings = total,
+                Completed = completed,
+                Upcoming = upcoming
             };
 
             return View(vm);

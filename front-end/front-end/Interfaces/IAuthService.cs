@@ -1,4 +1,5 @@
 ﻿using front_end.Auth;
+using front_end.DTOs;
 
 namespace front_end.Interfaces
 {
@@ -6,8 +7,13 @@ namespace front_end.Interfaces
     {
         Task<bool> RegisterUserAsync(RegisterDto dto);
         Task<bool> RegisterProviderAsync(RegisterDto dto);
-        Task<string?> LoginAsync(LoginDto dto); // returns token or null on failure
-        Task LogoutAsync(); // removes token from storage
+
+        Task<string?> LoginAsync(LoginDto dto);
+
+        Task LogoutAsync();
         Task<bool> IsSignedInAsync();
+
+        // 🔥 New
+        UserDto? GetCurrentUser();
     }
 }

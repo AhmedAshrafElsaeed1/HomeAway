@@ -2,127 +2,106 @@
 using front_end.Interfaces;
 using front_end.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Diagnostics;
-using front_end.Models;
 
 namespace front_end.Controllers
 {
     public class ProviderController : Controller
     {
-        // الخدمات موجودة لكن لن نستخدمها الآن لتجنب الايرور
-        private readonly IHotelService _hotelService;
         private readonly IRoomService _roomService;
-        private readonly IReservationService _reservationService;
 
-        public ProviderController(IHotelService hotelService, IRoomService roomService, IReservationService reservationService)
+        public ProviderController(IRoomService roomService)
         {
-            _hotelService = hotelService;
             _roomService = roomService;
-            _reservationService = reservationService;
         }
 
-        // 1. Dashboard Page (بيانات وهمية للتجربة)
-        // 1. Dashboard Page (Mock Data Updated)
-        public IActionResult Index()
+        // Dashboard
+        public async Task<IActionResult> Index()
         {
-            try
+            var rooms = await _roomService.GetAllAsync();
+            var model = new ProviderDashboardViewModel
             {
-                var hotel = new HotelDto
-                {
-                    Id = 1,
-                    Name = "Grand Plaza Hotel (Test)",
-                    Address = "Cairo, Egypt",
-                    Rating = 5
-                };
-
-                var myRooms = new List<RoomDto>
-        {
-            new RoomDto { Id = 101, Number = "101", Type = 0, Price = 100, IsAvailable = true, HotelId = 1 },
-            new RoomDto { Id = 102, Number = "102", Type = 1, Price = 200, IsAvailable = false, HotelId = 1 },
-            new RoomDto { Id = 103, Number = "Suite 1", Type = 3, Price = 500, IsAvailable = true, HotelId = 1 }
-        };
-
-                // هنا ضفتلك حجوزات بكل الحالات (0, 1, 2, 3)
-                var myReservations = new List<ReservationDto>
-        {
-            new ReservationDto { Id = 50, RoomId = 102, From = DateTime.Now, To = DateTime.Now.AddDays(3), TotalPrice = 600, Status = 1 }, // Confirmed
-            new ReservationDto { Id = 51, RoomId = 101, From = DateTime.Now.AddDays(5), To = DateTime.Now.AddDays(7), TotalPrice = 200, Status = 0 }, // Pending
-            new ReservationDto { Id = 52, RoomId = 103, From = DateTime.Now.AddDays(-5), To = DateTime.Now.AddDays(-2), TotalPrice = 1500, Status = 3 }, // Completed
-            new ReservationDto { Id = 53, RoomId = 101, From = DateTime.Now.AddDays(10), To = DateTime.Now.AddDays(12), TotalPrice = 200, Status = 2 } // Canceled
-        };
-
-                var model = new ProviderDashboardViewModel
-                {
-                    HotelInfo = hotel,
-                    Rooms = myRooms,
-                    Reservations = myReservations,
-                    // بنحسب الأرباح فقط للحجوزات المكتملة أو المؤكدة (حسب البيزنس بتاعك، هنا حسبت الاتنين)
-                    TotalRevenue = myReservations.Where(r => r.Status == 1 || r.Status == 3).Sum(r => r.TotalPrice)
-                };
-
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                var errorModel = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
-                return View("Error", errorModel);
-            }
+                HotelInfo = null,
+                Rooms = rooms,
+                Reservations = null,
+                TotalRevenue = 0
+            };
+            return View(model);
         }
 
-        // 2. Manage Rooms Page (بيانات وهمية)
-        // 2. Manage Rooms Page (Updated Mock Data)
-        public IActionResult Rooms()
+        // Manage Rooms
+        public async Task<IActionResult> Rooms()
         {
-            var myRooms = new List<RoomDto>
-    {
-        // غرفة فردية متاحة
-        new RoomDto { Id = 101, Number = "101", Type = 0, Price = 100, IsAvailable = true, HotelId = 1 },
-        
-        // غرفة مزدوجة مشغولة
-        new RoomDto { Id = 102, Number = "102", Type = 1, Price = 200, IsAvailable = false, HotelId = 1 },
-        
-        // جناح (Penthouse) متاح
-        new RoomDto { Id = 105, Number = "ROYAL SUITE", Type = 4, Price = 1500, IsAvailable = true, HotelId = 1 },
-        
-        // غرفة ثلاثية
-        new RoomDto { Id = 103, Number = "205", Type = 2, Price = 350, IsAvailable = true, HotelId = 1 },
-
-         // غرفة رباعية
-        new RoomDto { Id = 104, Number = "206", Type = 3, Price = 500, IsAvailable = true, HotelId = 1 }
-    };
-
-            return View(myRooms);
+            var rooms = await _roomService.GetAllAsync();
+            return View(rooms);
         }
 
-        // 3. Create Room (GET) - بتفتح عادي
+        // GET: استخدمي نفس صفحة الـ signup لتظهر فورم إدخال الغرفة
         public IActionResult CreateRoom()
         {
-            return View();
+            // هيروح على View الخاص بالـ signup
+            return View("~/Views/Signup/Rooms.cshtml");
         }
 
-        // 3. Create Room (POST) - مش هتحفظ بجد لكن هترجعك للصفحة
+        // POST: Create Room من صفحة signup
         [HttpPost]
-        public IActionResult CreateRoom(RoomDto dto)
+        public async Task<IActionResult> CreateRoom(CreateRoomViewModel model)
         {
-            // تمثيل عملية الحفظ
+            if (!ModelState.IsValid)
+            {
+                // لو في خطأ في البيانات نرجع نفس الصفحة مع الـ ViewModel
+                return View("~/Views/Signup/Rooms.cshtml", model);
+            }
+
+            // تحويل ViewModel إلى DTO
+            var dto = new RoomDto
+            {
+                Number = model.Number,
+                Type = int.TryParse(model.Type, out int typeValue) ? typeValue : 0, // أو أي طريقة تحويل مناسبة
+                
+                Quantity = model.Quantity,
+                // لو عندك HotelId، حطيه هنا
+            };
+
+            var newRoomId = await _roomService.CreateAsync(dto);
+            if (newRoomId == null)
+            {
+                TempData["Error"] = "Failed to create room.";
+                return View("~/Views/Signup/Rooms.cshtml", model);
+            }
+
+            TempData["Success"] = "Room created successfully!";
+            return RedirectToAction("Rooms"); // بعد الإضافة روح على صفحة Manage Rooms
+        }
+
+
+        // POST: Update Price
+        [HttpPost]
+        public async Task<IActionResult> UpdatePrice(int roomId, decimal newPrice)
+        {
+            var dto = new UpdateRoomDto
+            {
+                Id = roomId,
+                Price = newPrice
+            };
+
+            var success = await _roomService.UpdateAsync(dto);
+
+            if (!success)
+                TempData["Error"] = "Failed to update price.";
+
             return RedirectToAction("Rooms");
         }
 
-        // 4. Update Price - تمثيل فقط
-        [HttpPost]
-        public IActionResult UpdatePrice(int roomId, decimal newPrice)
+        // Delete Room
+        public async Task<IActionResult> DeleteRoom(int id)
         {
-            return RedirectToAction("Rooms");
-        }
+            var success = await _roomService.DeleteAsync(id);
+            if (!success)
+                TempData["Error"] = "Failed to delete room.";
 
-        // 5. Delete Room - تمثيل فقط
-        public IActionResult DeleteRoom(int id)
-        {
             return RedirectToAction("Rooms");
         }
     }
 }
+

@@ -4,66 +4,75 @@
     Layout = "_Layout";
 }
 
-<div class="profile-layout">
-    <aside class="profile-sidebar">
-        <div class="user-info">
-            <div class="user-avatar">JD</div>
-            <h3>John Doe</h3>
-            <p>john.doe@email.com</p>
+<div class="container mt-4 profile-layout row">
+    <!-- Sidebar -->
+    <aside class="col-md-3 profile-sidebar mb-4">
+        <div class="card p-3 text-center">
+            <div class="user-avatar rounded-circle bg-primary text-white mx-auto mb-2"
+                 style="width:60px; height:60px; display:flex; align-items:center; justify-content:center; font-size:24px;">
+                @(string.IsNullOrEmpty(Model.CurrentUser?.FullName)
+                                ? "G"
+                                : Model.CurrentUser.FullName.Substring(0, 1).ToUpper())
+            </div>
+            <h5>@(Model.CurrentUser?.FullName ?? "Guest")</h5>
+            <p class="text-muted mb-2">@(!string.IsNullOrEmpty(Model.CurrentUser?.Email) ? Model.CurrentUser.Email : "Not provided")</p>
         </div>
-        <nav class="profile-nav">
-            <a href="#" class="active">My Bookings</a>
-            <a href="#">Profile</a>
-            <a href="#">Wishlist</a>
-            <a href="#">Settings</a>
-            <a href="#" class="logout">Logout</a>
+
+        <nav class="nav flex-column mt-3">
+            <a class="nav-link active" href="#">My Bookings</a>
+            <a class="nav-link" href="#">Profile</a>
+            <a class="nav-link" href="#">Wishlist</a>
+            <a class="nav-link" href="#">Settings</a>
+            <a class="logout btn btn-danger mt-3" asp-controller="Login" asp-action="Logout">Logout</a>
+
         </nav>
     </aside>
-    <div class="profile-content">
-        <h2>My Bookings</h2>
-        <button class="btn btn-new-booking">New Booking</button>
 
-        <div class="booking-item">
-            <img src="~/images/pic6.jpg" alt="Grand Plaza Hotel">
-            <div class="booking-details">
-                <h4>Grand Plaza Hotel</h4>
-                <p>Dec 15 - Dec 18, 2024 (3 nights)</p>
-                <p>2 Adults, 1 Room</p>
-            </div>
-            <div class="booking-status">
-                <span>$656.70</span>
-                <span class="status confirmed">Confirmed</span>
-                <button class="btn btn-details">View Details</button>
-            </div>
-        </div>
-        <div class="booking-item">
-            <img src="~/images/pic5.jpg" alt="Seaside Resort">
-            <div class="booking-details">
-                <h4>Seaside Resort</h4>
-                <p>Nov 10 - Nov 12, 2024 (2 nights)</p>
-                <p>2 Adults, 1 Room</p>
-            </div>
-            <div class="booking-status">
-                <span>$420.50</span>
-                <span class="status completed">Completed</span>
-                <button class="btn btn-details">View Details</button>
-            </div>
-        </div>
+    <!-- Main Content -->
+    <div class="col-md-9 profile-content">
+        <h3 class="mb-3">My Bookings</h3>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="number">12</span>
-                <p>Total Bookings</p>
+        @if (Model.Bookings != null && Model.Bookings.Any())
+        {
+            @foreach (var booking in Model.Bookings)
+            {
+                <div class="card mb-2 p-2 d-flex justify-content-between align-items-center flex-md-row flex-column">
+                    <div>
+                        <h5>Room #@booking.RoomId</h5>
+                        <p class="mb-0">@booking.From.ToShortDateString() - @booking.To.ToShortDateString()</p>
+                    </div>
+                    <div>
+                        <span class="badge @(booking.Status == 1 ? "bg-success" : "bg-primary")">
+                            @(booking.Status == 1 ? "Completed" : "Confirmed")
+                        </span>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No bookings found.</p>
+        }
+
+        <div class="row mt-4 g-3">
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>@Model.TotalBookings</h4>
+                    <p>Total Bookings</p>
+                </div>
             </div>
-            <div class="stat-card">
-                <span class="number">8</span>
-                <p>Completed Stays</p>
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>@Model.Completed</h4>
+                    <p>Completed Stays</p>
+                </div>
             </div>
-            <div class="stat-card">
-                <span class="number">2</span>
-                <p>Upcoming Trips</p>
+            <div class="col-md-4">
+                <div class="card p-3 text-center">
+                    <h4>@Model.Upcoming</h4>
+                    <p>Upcoming Trips</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
-

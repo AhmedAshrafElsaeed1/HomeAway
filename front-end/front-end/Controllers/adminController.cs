@@ -103,7 +103,22 @@ namespace HotelsMVC.Controllers
                 return View("Error");
             }
         }
+        public async Task<IActionResult> Bookings()
+        {
+            var reservations = await _reservationService.GetAllAsync();
+            return View(reservations);
+        }
+       
 
+        // ======================
+        // 🔹 صفحة عرض كل الـ Rooms
+        // ======================
+        public async Task<IActionResult> ARooms()
+        {
+            var rooms = await _roomService.GetAllAsync();
+            return View(rooms);
+        }
     }
 }
+
 

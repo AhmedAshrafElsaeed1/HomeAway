@@ -5,8 +5,8 @@ namespace front_end.ViewModel
 {
     public class SearchViewModel
     {
-        // بدل List<RoomDto>، نعمل List من RoomWithHotelAddress
-        public List<RoomWithHotelAddress>? Results { get; set; }
+        // النتائج النهائية بعد ربط الغرفة بعنوان الفندق
+        public List<RoomWithHotelAddress> Results { get; set; } = new List<RoomWithHotelAddress>();
 
         // Filters
         public string? Destination { get; set; }
@@ -17,17 +17,14 @@ namespace front_end.ViewModel
         public decimal MinPrice { get; set; } = 0;
         public decimal MaxPrice { get; set; } = 1000;
 
+        // نستخدم رقم النجمة فقط لو حابين نفلتر حسب تقييم الفندق
         public int StarRating { get; set; } = 0;
-
-        public bool Wifi { get; set; }
-        public bool Parking { get; set; }
-        public bool Pool { get; set; }
 
         // Nested class لربط الغرفة بعنوان الفندق
         public class RoomWithHotelAddress
         {
-            public RoomDto Room { get; set; } = null!;
-            public string HotelAddress { get; set; } = string.Empty;
+            public RoomDto Room { get; set; } = null!; // بيانات الغرفة
+            public string HotelAddress { get; set; } = string.Empty; // عنوان الفندق
         }
     }
 }

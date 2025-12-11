@@ -1,83 +1,62 @@
-﻿@{
-    ViewData["Title"] = "signup";
-    Layout = "_Layout";
+﻿@model front_end.ViewModel.HotelRegisterViewModel
+
+@{
+    ViewData["Title"] = "Register Hotel";
 }
 
 <div class="container py-5">
-
     <div class="card shadow p-4 rounded-4">
-
-        <form enctype="multipart/form-data">
-
-            <!-- Title -->
-            <h2 class="text-center fw-semibold mb-4">
-                Register your hotel
-            </h2>
+        <form asp-action="RegisterHotel" method="post" enctype="multipart/form-data">
+            <h2 class="text-center fw-semibold mb-4">Register your hotel</h2>
 
             <div class="row g-4">
-
-                <!-- Left Side -->
                 <div class="col-md-6">
-
-                    <h4 class="fw-semibold mb-3">Hotel Details</h4>
-
                     <div class="mb-3">
                         <label class="form-label">Hotel Name</label>
-                        <input class="form-control" type="text" name="HotelName" />
+                        <input asp-for="HotelName" class="form-control" />
+                        <span asp-validation-for="HotelName" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Description</label>
-                        <textarea class="form-control" rows="4" name="Description"></textarea>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                     </div>
-
-                    <h4 class="fw-semibold mt-4 mb-3">Location and Contact</h4>
 
                     <div class="mb-3">
                         <label class="form-label">Hotel Address</label>
-                        <input class="form-control" type="text" name="HotelAddress" />
+                        <input asp-for="HotelAddress" class="form-control" />
+                        <span asp-validation-for="HotelAddress" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Email address</label>
-                        <input class="form-control" type="email" name="Email" />
+                        <label class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Phone number</label>
-                        <input class="form-control" type="text" name="Phone" />
+                        <label class="form-label">Phone</label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
-
                 </div>
 
-                <!-- Right Side -->
                 <div class="col-md-6">
-
                     <div class="p-4 rounded-3 bg-primary text-white">
-
                         <h5 class="fw-semibold">Photos of the hotel</h5>
-                        <p class="mb-3">Upload up to 10 photos</p>
-
-                        <input type="file" name="Photos" multiple
-                               class="form-control bg-white text-dark" />
-
+                        <p>Upload up to 10 photos</p>
+                        <input asp-for="Photos" type="file" multiple class="form-control bg-white text-dark" />
                     </div>
-
                 </div>
-
             </div>
 
-            <!-- NEXT BUTTON -->
             <div class="text-center mt-4">
-                <a asp-controller="signup"
-                   asp-action="rooms"
-                   class="btn btn-primary px-4 py-2 rounded-3 shadow-sm fw-semibold">
-                    Next
-                </a>
+                <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm fw-semibold">Next</button>
             </div>
-
         </form>
-
     </div>
-
 </div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,21 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using front_end.DTOs;
+using front_end.Interfaces;
+using front_end.ViewModel;
+using Microsoft.AspNetCore.Mvc;
 
 namespace front_end.Controllers
 {
-    public class reserveController : Controller
+    public class ReserveController : Controller
     {
-        public IActionResult Index()
-        {
-            try
-            {
-                return View();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return View("Error");
-            }
+        private readonly IRoomService _roomService;
 
+        public ReserveController(IRoomService RoomService)
+        {
+            _roomService = RoomService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index(int id =2)
+        {
+            var room = await _roomService.GetByIdAsync(id);
+            if (room == null)
+                return NotFound();
+
+            var vm = new ReserveViewModel
+            {
+                Room = room
+            };
+
+            return View(vm);
         }
     }
 }

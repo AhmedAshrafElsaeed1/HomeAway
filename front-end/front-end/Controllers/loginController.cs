@@ -63,5 +63,11 @@ namespace front_end.Controllers
                 return View(vm);
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.LogoutAsync();
+            return RedirectToAction("Index", "Home"); // بعد الخروج نرجع للصفحة الرئيسية
+        }
     }
 }

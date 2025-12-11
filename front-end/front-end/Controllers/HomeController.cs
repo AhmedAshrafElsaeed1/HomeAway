@@ -1,4 +1,5 @@
-﻿using front_end.Interfaces;
+﻿using front_end.DTOs;
+using front_end.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace front_end.Controllers
@@ -12,11 +13,12 @@ namespace front_end.Controllers
             _roomService = roomService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
-                return View();
+                var rooms = await _roomService.GetAllAsync();
+                return View(rooms ?? new List<RoomDto>());
             }
             catch (Exception ex)
             {

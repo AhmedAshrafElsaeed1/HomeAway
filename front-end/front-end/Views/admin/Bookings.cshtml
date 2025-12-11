@@ -1,0 +1,87 @@
+﻿@model List<front_end.DTOs.ReservationDto>
+
+@{
+    ViewData["Title"] = "Bookings";
+    Layout = "_Layout";
+}
+
+<div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="admin-logo">HomeAway Admin</div>
+        <nav class="admin-nav">
+            <a href="@Url.Action("Dashboard", "Admin")"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="@Url.Action("ARooms", "Admin")"><i class="fas fa-bed"></i> Rooms</a>
+            <a href="@Url.Action("Bookings", "Admin")" class="active"><i class="fas fa-users"></i> Bookings</a>
+            <a href="@Url.Action("Index", "Users")"><i class="fas fa-users"></i> Customers</a>
+
+            <a class="logout btn btn-danger mt-3 btn-sm"
+               asp-controller="Login"
+               asp-action="Logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="admin-main-content">
+
+        <div class="container mt-4">
+            <div class="card shadow rounded-4 p-4">
+                <h2 class="fw-bold mb-4 text-center">All Reservations</h2>
+
+                @if (Model == null || !Model.Any())
+                {
+                    <div class="alert alert-info text-center fw-bold">
+                        No bookings found.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Guest Name</th>
+                                    <th>Hotel</th>
+                                    <th>Room</th>
+                                    <th>Check-In</th>
+                                    <th>Check-Out</th>
+                                    <th>Total Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    var booking = Model[i];
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>@booking.UserId</td>
+                                        <td>@booking.RoomId</td>
+                                        <td>@booking.From.ToString("yyyy-MM-dd")</td>
+                                        <td>@booking.To.ToString("yyyy-MM-dd")</td>
+                                        <td class="fw-bold text-success">$@booking.TotalPrice</td>
+                                        <td>
+                                            <span class="badge bg-primary">@booking.Status</span>
+                                        </td>
+                                        <td>
+                                            <a asp-controller="Admin"
+                                               asp-action="BookingDetails"
+                                               asp-route-id="@booking.Id"
+                                               class="btn btn-sm btn-outline-primary">
+                                                Details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>

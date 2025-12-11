@@ -1,4 +1,5 @@
-﻿@{
+﻿@model front_end.ViewModel.ReserveViewModel
+@{
     ViewData["Title"] = "Reserve";
     Layout = "_Layout";
 }
@@ -13,8 +14,8 @@
 
 <div class="hotel-content-booking">
     <div class="hotel-details-content">
-        <h1>Grand Plaza Hotel</h1>
-        <div class="rating">4.5/5 (128 reviews) | Manhattan, New York</div>
+        <h1>@Model.Room.Number</h1>
+        <div class="rating">Hotel ID: @Model.Room.HotelId</div>
         <h3 class="section-title">Amenities</h3>
         <ul class="amenities-list-details">
             <li><i class="fas fa-wifi"></i> Free WiFi</li>
@@ -25,16 +26,16 @@
 
         <h3 class="section-title">Available Rooms</h3>
         <div class="room-card">
-            <img src="~/images/pic4.jpg" alt="Deluxe King Room">
+            <img src="~/images/pic4.jpg" alt="@Model.Room.Number">
             <div class="room-info">
-                <h4>Deluxe King Room</h4>
-                <p>Spacious room with king bed, city view, and luxury amenities</p>
+                <h4>@Model.Room.Number</h4>
+                <p>Type: @Model.Room.Type | Quantity: @Model.Room.Quantity</p>
                 <div class="room-options">
-                    <span>Free Cancellation</span> | <span>**Breakfast Included**</span>
+                    <span>Free Cancellation</span>
                 </div>
             </div>
             <div class="room-price-action">
-                <div class="price-per-night">$199 <span>per night</span></div>
+                <div class="price-per-night">$@Model.Room.Price <span>per night</span></div>
                 <button class="btn btn-primary">Book Now</button>
             </div>
         </div>
@@ -59,13 +60,14 @@
             <select><option>1 Room</option></select>
         </div>
 
-        <div class="price-summary">
-            <p>$199 x 3 nights <span>$597</span></p>
-            <p>Taxes & Fees <span>$59.70</span></p>
-            <p class="total">Total <span>$656.70</span></p>
-        </div>
-        <a asp-controller="payment" asp-action="Index" class="btn btn-outline-primary w-100 btn-main">
-            reserve and buy
+       <div class="price-summary">
+    <p>$@Model.Room.Price x 3 nights <span>$@(Model.Room.Price * 3m)</span></p>
+    <p>Taxes & Fees <span>$@(Model.Room.Price * 0.1m * 3m)</span></p>
+    <p class="total">Total <span>$@(Model.Room.Price * 3m * 1.1m)</span></p>
+</div>
+
+        <a asp-controller="Payment" asp-action="Index" class="btn btn-outline-primary w-100 btn-main">
+            Reserve and Buy
         </a>
     </aside>
 </div>
