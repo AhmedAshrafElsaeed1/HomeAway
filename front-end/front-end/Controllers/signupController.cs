@@ -168,12 +168,13 @@ namespace front_end.Controllers
             }
 
             // Auto Login
-            await _authService.LoginAsync(new LoginDto
+            var p = await _authService.LoginAsync(new LoginDto
             {
                 UserName = userName,
                 Password = password
-            });
 
+            });
+            _authService.StoreToken(p);
             return RedirectToAction("Index", "Home");
         }
     }

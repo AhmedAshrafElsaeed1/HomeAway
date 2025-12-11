@@ -12,6 +12,7 @@ namespace front_end.Interfaces
 
         Task LogoutAsync();
         Task<bool> IsSignedInAsync();
+        void StoreToken(string token);
 
         // 🔥 New
         UserDto? GetCurrentUser();
