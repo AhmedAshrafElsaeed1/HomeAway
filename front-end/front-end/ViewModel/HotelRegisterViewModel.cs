@@ -11,6 +11,7 @@ namespace front_end.ViewModel
         public string Email { get; set; }
         public string Phone { get; set; }
         public List<IFormFile> Photos { get; set; }
+        public int Rating { get; set; }
     }
 }
 

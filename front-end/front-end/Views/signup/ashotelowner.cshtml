@@ -27,36 +27,32 @@
             <span>Room Info</span>
         </div>
 
-        <!-- Form -->
-        <form>
-
+        <form asp-controller="Signup" asp-action="RegisterProvider" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <label class="form-label">Full Name</label>
-                <input type="text" class="form-control" placeholder="Enter your name">
+                <label class="form-label">UserName</label>
+                <input asp-for="UserName" class="form-control" placeholder="Enter your User name">
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-control" placeholder="Enter your email">
+                <label class="form-label">Full Name</label>
+                <input asp-for="FullName" class="form-control" placeholder="Enter your name">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" placeholder="Enter your email">
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-control" placeholder="Enter your password">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password">
             </div>
 
-            <div class="mb-4">
-                <label class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" placeholder="Confirm your password">
-            </div>
-
-            <!-- Next Button -->
-            <a asp-controller="Signup" asp-action="Registerhotel"
-               class="btn btn-primary w-100 py-2">
+            <button type="submit" class="btn btn-primary w-100 py-2">
                 Next
-            </a>
-
+            </button>
         </form>
+
 
     </div>
 </div>

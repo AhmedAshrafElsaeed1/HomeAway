@@ -9,10 +9,12 @@ namespace front_end.Controllers
     public class SignupController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly IHotelService _hotelService;
 
-        public SignupController(IAuthService authService)
+        public SignupController(IAuthService authService, IHotelService hotelService)
         {
             _authService = authService;
+            _hotelService = hotelService;
         }
 
         // =============================== INDEX ===============================
@@ -68,20 +70,20 @@ namespace front_end.Controllers
             return View();   // Views/Signup/AsHotelOwner.cshtml
         }
 
-        [HttpPost]
-        public IActionResult RegisterProvider(AsHotelOwnerViewModel vm)
-        {
-            if (!ModelState.IsValid)
-                return View("AsHotelOwner", vm);
+        //[HttpPost]
+        //public IActionResult RegisterProvider(AsHotelOwnerViewModel vm)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View("AsHotelOwner", vm);
 
-            // حفظ البيانات مؤقتًا
-            TempData["FullName"] = vm.OwnerName;
-            TempData["UserName"] = vm.UserName;
-            TempData["Email"] = vm.Email;
-            TempData["Password"] = vm.Password;
+        //    // حفظ البيانات مؤقتًا
+        //    TempData["FullName"] = vm.OwnerName;
+        //    TempData["UserName"] = vm.UserName;
+        //    TempData["Email"] = vm.Email;
+        //    TempData["Password"] = vm.Password;
 
-            return RedirectToAction("RegisterHotel");
-        }
+        //    return RedirectToAction("RegisterHotel");
+        //}
 
 
 
@@ -95,14 +97,27 @@ namespace front_end.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterHotel(HotelRegisterViewModel model)
+        public async Task<IActionResult> RegisterHotelinDB(HotelRegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            TempData["HotelName"] = model.HotelName;
-            TempData["Address"] = model.HotelAddress;
-            TempData["Description"] = model.Description;
+
+            var imagesBase64 = await ConvertImagesToBase64(model.Photos);
+
+            var providerDto = new HotelDto
+            {
+                Name = model.HotelName,
+                Description = model.Description,
+                Address = model.HotelAddress,
+                Email = model.Email,
+                PhoneNumber = model.Phone,
+                images = imagesBase64,
+                Rating = model.Rating
+
+            };
+
+            var created = await _hotelService.CreateAsync(providerDto);
 
             return RedirectToAction("Rooms");
         }
@@ -137,26 +152,14 @@ namespace front_end.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterProvider()
+        public async Task<IActionResult> RegisterProvider(AsHotelOwnerViewModel hotelOwner)
         {
-            //Read TempData
-            var fullName = TempData["FullName"]?.ToString();
-            var userName = TempData["UserName"]?.ToString();
-            var email = TempData["Email"]?.ToString();
-            var password = TempData["Password"]?.ToString();
-
-            if (fullName == null)
-            {
-                ViewBag.Error = "Session expired, please try again.";
-                return RedirectToAction("AsHotelOwner");
-            }
-
             var providerDto = new RegisterDto
             {
-                FullName = fullName,
-                UserName = userName,
-                Email = email,
-                Password = password
+                FullName = hotelOwner.FullName,
+                UserName = hotelOwner.UserName,
+                Email = hotelOwner.Email,
+                Password = hotelOwner.Password
             };
 
             var created = await _authService.RegisterProviderAsync(providerDto);
@@ -170,12 +173,35 @@ namespace front_end.Controllers
             // Auto Login
             var p = await _authService.LoginAsync(new LoginDto
             {
-                UserName = userName,
-                Password = password
+                UserName = hotelOwner.UserName,
+                Password = hotelOwner.Password
 
             });
             _authService.StoreToken(p);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("RegisterHotel", "Signup");
         }
+        private async Task<string[]> ConvertImagesToBase64(List<IFormFile> photos)
+        {
+            if (photos == null || !photos.Any())
+                return Array.Empty<string>();
+
+            List<string> base64Images = new List<string>();
+
+            foreach (var photo in photos)
+            {
+                using var ms = new MemoryStream();
+                await photo.CopyToAsync(ms);
+                var bytes = ms.ToArray();
+                string base64 = Convert.ToBase64String(bytes);
+
+                // Add prefix to allow `<img src="data:image...">`
+                string formatted = $"data:{photo.ContentType};base64,{base64}";
+
+                base64Images.Add(formatted);
+            }
+
+            return base64Images.ToArray();
+        }
+
     }
 }

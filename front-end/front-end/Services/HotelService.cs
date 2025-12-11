@@ -35,8 +35,12 @@ namespace front_end.Services
             if (!response.IsSuccessStatusCode)
                 return null;
 
-            var createdObj = await response.Content.ReadFromJsonAsync<dynamic>();
-            return (int?)createdObj?.id;
+            // Safely read JSON only if it exists
+            if (response.Content.Headers.ContentLength == 0)
+                return null;
+
+            var createdObj = await response.Content.ReadFromJsonAsync<CreatedResponse>();
+            return createdObj?.Id;
         }
 
         public async Task<bool> UpdateAsync(UpdateHotelDto dto)
@@ -52,6 +56,11 @@ namespace front_end.Services
             var response = await client.DeleteAsync($"hotels/{id}");
             return response.IsSuccessStatusCode;
         }
+
+    }
+    public class CreatedResponse
+    {
+        public int Id { get; set; }
     }
 
 }
