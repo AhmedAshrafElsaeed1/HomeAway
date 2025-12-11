@@ -15,7 +15,7 @@ namespace front_end.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int id =3)
+        public async Task<IActionResult> Index(int id =2)
         {
             var room = await _roomService.GetByIdAsync(id);
             if (room == null)
