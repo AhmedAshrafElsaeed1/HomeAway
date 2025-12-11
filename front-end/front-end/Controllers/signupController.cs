@@ -1,101 +1,181 @@
-﻿using front_end.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using front_end.Auth;
+using front_end.DTOs;
+using front_end.Interfaces;
+using front_end.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace front_end.Controllers
 {
     public class SignupController : Controller
     {
-        // GET: الصفحة الرئيسية للـ signup (اختيار نوع الحساب)
-        [HttpGet]
+        private readonly IAuthService _authService;
+
+        public SignupController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+        // =============================== INDEX ===============================
         public IActionResult Index()
         {
-            return View();
+            return View();   // Views/Signup/Index.cshtml
         }
+
+        // ====================================================================
+        // ============================ CUSTOMER ===============================
+        // ====================================================================
+
+        [HttpGet]
         public IActionResult AsCustomer()
         {
-            // ViewModel الخاص بالعميل
-            return View(new RegisterViewModel());
+            return View();   // Views/Signup/AsCustomer.cshtml
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AsCustomer(RegisterDto dto)
+        {
+            if (!ModelState.IsValid)
+                return View(dto);
+
+            var created = await _authService.RegisterUserAsync(dto);
+
+            if (!created)
+            {
+                ViewBag.Error = "Registration failed.";
+                return View(dto);
+            }
+
+            // Auto login
+            await _authService.LoginAsync(new LoginDto
+            {
+                UserName = dto.UserName,
+                Password = dto.Password
+            });
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        // ====================================================================
+        // ============================ PROVIDER ===============================
+        // ====================================================================
+
+        // ======================= STEP 1: USER INFO ==========================
 
         [HttpGet]
         public IActionResult AsHotelOwner()
         {
-            return View(new HotelOwnerRegisterViewModel());
-        }
-
-        // ====== صفحة تسجيل الفندق ======
-        [HttpGet]
-        public IActionResult RegisterHotel()
-        {
-            return View(new HotelRegisterViewModel());
+            return View();   // Views/Signup/AsHotelOwner.cshtml
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RegisterHotel(HotelRegisterViewModel vm)
+        public IActionResult RegisterProvider(AsHotelOwnerViewModel vm)
         {
             if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
+                return View("AsHotelOwner", vm);
 
-            // تحويل الصور لـ Base64
-            var photosBase64 = new List<string>();
+            // حفظ البيانات مؤقتًا
+            TempData["FullName"] = vm.OwnerName;
+            TempData["UserName"] = vm.UserName;
+            TempData["Email"] = vm.Email;
+            TempData["Password"] = vm.Password;
 
-            if (vm.Photos != null && vm.Photos.Count > 0)
-            {
-                foreach (var photo in vm.Photos)
-                {
-                    if (photo.Length > 0)
-                    {
-                        using var ms = new MemoryStream();
-                        await photo.CopyToAsync(ms);
-                        var fileBytes = ms.ToArray();
-                        var base64String = Convert.ToBase64String(fileBytes);
-                        photosBase64.Add(base64String);
-                    }
-                }
-            }
+            return RedirectToAction("RegisterHotel");
+        }
 
-            // مثال: إنشاء DTO لإرسال البيانات للـ API
-            var hotelDto = new RegisterHotelDto
-            {
-                HotelName = vm.HotelName,
-                Description = vm.Description,
-                HotelAddress = vm.HotelAddress,
-                Email = vm.Email,
-                Phone = vm.Phone,
-                PhotosBase64 = photosBase64
-            };
 
-            // هنا ممكن تبعتي الـ DTO للـ API
-            // await _hotelService.RegisterHotelAsync(hotelDto);
 
-            // بعد التسجيل، نروح لصفحة الغرف
+
+        // ======================= STEP 2: HOTEL INFO ==========================
+
+        [HttpGet]
+        public IActionResult RegisterHotel()
+        {
+            return View();   // Views/Signup/RegisterHotel.cshtml
+        }
+
+        [HttpPost]
+        public IActionResult RegisterHotel(HotelRegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            TempData["HotelName"] = model.HotelName;
+            TempData["Address"] = model.HotelAddress;
+            TempData["Description"] = model.Description;
+
             return RedirectToAction("Rooms");
         }
 
-        // ====== صفحة إدخال الغرف بعد تسجيل الفندق ======
+
+        // ======================= STEP 3: ROOMS INFO ==========================
+
         [HttpGet]
         public IActionResult Rooms()
         {
-            return View();
+            return View();   // Views/Signup/Rooms.cshtml
         }
-    }
 
-    // ====== DTO مثال لإرسال البيانات للـ API ======
-    public class RegisterHotelDto
-    {
-        public string HotelName { get; set; }
-        public string Description { get; set; }
-        public string HotelAddress { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public List<string> PhotosBase64 { get; set; }
+        [HttpPost]
+        public IActionResult Rooms(CreateRoomViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            
+
+            return RedirectToAction("SubmitProvider");
+        }
+
+
+        // ======================= STEP 4: SUBMIT ALL ==========================
+
+        [HttpGet]
+        public IActionResult SubmitProvider()
+        {
+            return View();   // Views/Signup/SubmitProvider.cshtml
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterProvider()
+        {
+            //Read TempData
+            var fullName = TempData["FullName"]?.ToString();
+            var userName = TempData["UserName"]?.ToString();
+            var email = TempData["Email"]?.ToString();
+            var password = TempData["Password"]?.ToString();
+
+            if (fullName == null)
+            {
+                ViewBag.Error = "Session expired, please try again.";
+                return RedirectToAction("AsHotelOwner");
+            }
+
+            var providerDto = new RegisterDto
+            {
+                FullName = fullName,
+                UserName = userName,
+                Email = email,
+                Password = password
+            };
+
+            var created = await _authService.RegisterProviderAsync(providerDto);
+
+            if (!created)
+            {
+                ViewBag.Error = "Provider registration failed.";
+                return RedirectToAction("AsHotelOwner");
+            }
+
+            // Auto Login
+            var p = await _authService.LoginAsync(new LoginDto
+            {
+                UserName = userName,
+                Password = password
+
+            });
+            _authService.StoreToken(p);
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

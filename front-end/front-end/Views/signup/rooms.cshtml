@@ -32,6 +32,10 @@
                         <label class="form-label">Quantity</label>
                         <input asp-for="Quantity" type="number" class="form-control" />
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price</label>
+                        <input asp-for="Price" type="decimal" class="form-control" />
+                    </div>
                 </div>
 
                 <!-- Right -->
@@ -48,7 +52,10 @@
             </div>
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary px-4">Confirm</button>
+                <a asp-controller="Login" asp-action="Index" class="btn btn-primary px-4">
+    Confirm
+</a>
+
             </div>
         </form>
     </div>

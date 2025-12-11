@@ -111,7 +111,7 @@
 
 
         // ------------------ STORE TOKEN IN COOKIE ------------------
-        private void StoreToken(string token)
+        public void StoreToken(string token)
         {
             var ctx = _httpContextAccessor.HttpContext;
             if (ctx == null) return;

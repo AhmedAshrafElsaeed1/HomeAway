@@ -1,6 +1,6 @@
 ﻿namespace front_end.ViewModel
 {
-    public class HotelOwnerRegisterViewModel
+    public class AsHotelOwnerViewModel
     {
         public string OwnerName { get; set; }
         public string HotelName { get; set; }
