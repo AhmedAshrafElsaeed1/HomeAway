@@ -1,0 +1,115 @@
+﻿@model List<front_end.DTOs.RoomDto>
+
+@{
+    ViewData["Title"] = "ARooms";
+    Layout = "_Layout";
+}
+
+<div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="admin-logo">HomeAway Admin</div>
+        <nav class="admin-nav">
+            <a href="@Url.Action("Dashboard", "Admin")"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="@Url.Action("ARooms", "Admin")" class="active"><i class="fas fa-bed"></i> Rooms</a>
+            <a href="@Url.Action("Bookings", "Admin")"><i class="fas fa-book"></i> Bookings</a>
+            <a href="@Url.Action("Index", "Users")"><i class="fas fa-users"></i> Customers</a>
+
+            <a class="logout btn btn-danger mt-3 btn-sm"
+               asp-controller="Login"
+               asp-action="Logout">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="admin-main-content">
+
+        <div class="container mt-4">
+            <div class="card shadow rounded-4 p-4">
+                <h2 class="fw-bold mb-4 text-center">All Rooms</h2>
+
+                @if (Model == null || !Model.Any())
+                {
+                    <div class="alert alert-info text-center fw-bold">
+                        No rooms found.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Room Name</th>
+                                    <th>Hotel</th>
+                                    <th>Capacity</th>
+                                    <th>Price</th>
+                                    <th>Available</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    var room = Model[i];
+                                    <tr>
+                                        <td>@(i + 1)</td>
+                                        <td>@room.Number </td>
+
+                                        <!-- هنجيب اسم الفندق لو موديل فيه HotelName -->
+                                        <td>@room.HotelId</td>
+
+                                        <td>@room.Quantity</td>
+                                        <td class="fw-bold text-success">$@room.Price</td>
+
+                                        <td>
+                                            @if (room.IsAvailable)
+                                            {
+                                                <span class="badge bg-success">Available</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Not Available</span>
+                                            }
+                                        </td>
+
+                                        <td>@room.Type</td>
+
+                                        <td>
+                                            <a asp-controller="Rooms"
+                                               asp-action="Details"
+                                               asp-route-id="@room.Id"
+                                               class="btn btn-sm btn-outline-primary">
+                                                Details
+                                            </a>
+
+                                            <a asp-controller="Rooms"
+                                               asp-action="Edit"
+                                               asp-route-id="@room.Id"
+                                               class="btn btn-sm btn-outline-warning ms-1">
+                                                Edit
+                                            </a>
+
+                                            <a asp-controller="Rooms"
+                                               asp-action="Delete"
+                                               asp-route-id="@room.Id"
+                                               class="btn btn-sm btn-outline-danger ms-1">
+                                                Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
